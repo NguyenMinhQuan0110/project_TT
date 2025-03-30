@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+body{
+    margin: 0;
+    font-family:Noto Sans JP;
+}
+header{
+    height: 75px;
+    background-color: #007EC6;
+    width: 100%;
+    display: flex;
+    position: sticky;
+    top: 0; /* Menu dính ở phía trên màn hình */
+    z-index: 1000; /* Đảm bảo menu hiển thị phía trên */
+}
+header h1{
+   margin: 0;
+   padding-top: 15px;
+   padding-left: 42px;
+   color: #FFFFFF;
+   font-size: 40px;
+   font-family:Noto Sans JP;
+}
+header p{
+    padding-left: 33px;
+    padding-top: 16px;
+    color: #FFFFFF;
+    font-size: 20px;
+
+    font-family:Noto Sans JP;
+}
+.than{
+    display: flex;
+}
+.menu{
+    position: sticky;
+    width: 269px;
+    height: 600px;
+    border: solid 1px #00000026;
+    border-radius: 4px;
+    overflow: hidden; /* Giữ nội dung nằm bên trong vùng bo góc */
+    top: 75px; /* Menu dính ở phía trên màn hình */
+    z-index: 1000; /* Đảm bảo menu hiển thị phía trên */
+}
+
+.menu ul{
+    padding: 0;
+    margin: 3px 0 0 0;
+}
+
+.menu ul li{
+    list-style-type: none;
+    height: 56px;
+    display: flex; /* Sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding: 0; /* Xóa padding mặc định */
+}
+.dashboard{
+    background-color: #007EC6;
+}
+/* Khi menu được hover, li.dashboard trở về màu trắng */
+.menu:hover .dashboard {
+    background-color: #FFFFFF; /* Màu nền trắng */
+}
+
+/* Khi li.dashboard được hover, giữ màu xanh sẫm */
+.menu ul li.dashboard:hover {
+    background-color: #007EC6; /* Màu xanh sẫm khi hover */
+}
+/*hover chung cho thanh menu*/
+.menu ul li:hover{
+    background-color: #007EC6;
+}
+.menu ul li a{
+    text-decoration: none;
+    color: #1D1B20;
+    margin-left: 24px;
+}
+.tren{
+    display: flex;
+    margin-top: 27px;
+}
+.tren form label{
+    font-size: 14px;
+    margin-left: 45px;
+}
+.tren form input[type="text"]{
+    height: 40px;
+    width: 272px;
+    border: solid 1px #D9D9D9;
+    border-radius: 4px;
+    margin-left: 15px;
+}
+.tren form input[type="submit"]{
+    margin-left: 35px;
+    width: 93px;
+    height: 40px;
+    border: none;
+    background-color: #FF7700;
+    color: #F5F5F5;
+    border-radius: 6px;
+}
+.tren button{
+    width: 99px;
+    height: 40px;
+    border: none;
+    color: #F5F5F5;
+    border-radius: 6px;
+}
+table{
+    border: solid 1px  #b9b9b9bc;
+    border-radius: 4px;
+    width: 96%;
+    margin-left: 48px;
+    margin-top: 43px;
+    margin-bottom: 42px;
+    border-spacing: 0; /* Đảm bảo không có khoảng cách giữa các ô */
+    overflow: hidden; /* Giữ nội dung bên trong vùng bo tròn */
+}
+/* Tiêu đề bảng */
+table th {
+    background-color: #ddd; /* Màu nền của tiêu đề */
+    color: #333; /* Màu chữ */
+    font-weight: bold; /* Chữ đậm cho tiêu đề */
+    text-align: left; /* Căn lề trái */
+    padding: 10px; /* Khoảng cách bên trong tiêu đề */
+    border: 1px solid #B9B9B9; /* Đường viền giữa các ô */
+    height: 36px;
+}
+/* Các ô dữ liệu */
+table td {
+    border: 1px solid #B9B9B9; /* Đường viền giữa các ô */
+    text-align: left; /* Căn lề trái nội dung */
+    padding: 10px; /* Khoảng cách bên trong ô */
+    font-size: 14px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+    height: auto;
+    position: relative; /* Để hỗ trợ căn chỉnh nội dung trong ô */
+}
+/* Hiển thị nút bên phải */
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa các nút */
+    margin-left: 80px;
+}
+/* Hiệu ứng khi rê chuột qua hàng */
+table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+table button{
+    width: 48px;
+    height: 25px;
+    border: none;
+    border-radius: 8px;
+    color: #F5F5F5;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.pagination a, .pagination .dots {
+    text-decoration: none;
+    color: black;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination .active {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination .prev, .pagination .next {
+    font-weight: bold;
+}
+
+.pagination .prev {
+    color: gray;
+}
+
+.pagination .next {
+    color: black;
+}
+
+.pagination .dots {
+    cursor: default;
+}
+
+
+
+
