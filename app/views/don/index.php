@@ -28,9 +28,9 @@
             <?php endif; ?>
         <div class="main">
             <div class="tren">
-                <form action="" style="margin-right: 348px;">
+                <form action="<?php echo URLROOT ?>/don/searchDon" method="get" style="margin-right: 348px;">
                     <label for="">Tên Uesr/Loại đơn/Nội dung</label>
-                    <input type="text">
+                    <input type="text" name="keyword">
                     <input type="submit" value="Tìm kiếm">
                 </form>
                 <a href="<?php echo URLROOT ?>/don/showForminsert"><button style="background-color: #007EC6;width: 133px;">Thêm mới đơn</button></a>
@@ -57,7 +57,12 @@
                             <td style="display: flex;justify-content: space-between; /* Đẩy nội dung và nút sang hai phía */"><span> <?php echo $don->title ?></span>
                                 <div class="buttons" style="display: <?php if($don->trangthai!="chưa duyệt"){echo "none";} ?>;">
                                     <a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>"><button style="background-color: #14AE5C;">Duyệt</button></a>
-                                    <button style="background-color: #EC221F;">Hủy</button>
+                                    <button style="background-color: #EC221F;" 
+                                    class="cancel-btn"
+                                    data-donid="<?php echo $don->id ?>"
+                                    data-userid="<?php echo $don->userid ?>"
+                                    data-title="<?php echo htmlspecialchars($don->title) ?>"
+                                    data-loaidon="<?php echo htmlspecialchars($don->loaidon) ?>">Hủy</button>
                                 </div>
                             </td>
                         </tr>
@@ -65,7 +70,9 @@
             </table>
             <div class="pagination">
                 <?php
-                    $baseUrl=URLROOT . '/don/index';
+                    $baseUrl = isset($data['keyword']) && !empty($data['keyword']) 
+                    ? URLROOT . '/don/searchDon?keyword=' . urlencode($data['keyword']) 
+                    : URLROOT . '/don/index';
                 ?>
                 <?php if ($data['currentPage'] > 1): ?>
                     <a href="<?php echo $baseUrl . '&page=' . ($data['currentPage'] - 1); ?>" class="prev">← Previous</a>
@@ -97,29 +104,7 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function(){
-            const headerCheckBox=document.querySelector("th img");
-            const rowCheckBoxs=document.querySelectorAll("td img");
-            //Bắt sự kiện kick vào ảnh checkbox
-            headerCheckBox.addEventListener("click",function(){
-                let ischecked=headerCheckBox.getAttribute("src")==="/checkbox.png";
-                //Đảo trạng thái checkbox ở header
-                headerCheckBox.setAttribute("src",ischecked?"/checkked.png":"/checkbox.png");
-                //Đảo trạng thái checkbox ở các dòng
-                rowCheckBoxs.forEach(function(item){
-                    item.setAttribute("src", ischecked ? "/checkked.png" : "/checkbox.png");
-                })
-            })
-            //Bắt sự kiện kick vào ảnh checkbox ở các dòng
-            rowCheckBoxs.forEach(function(item){
-                item.addEventListener("click",function(e){
-                    let ischecked=item.getAttribute("src")==="/checkbox.png";
-                    item.setAttribute("src",ischecked?"/checkked.png":"/checkbox.png");
-                })
-            })
-        })
+</div>
 
-    </script>
 </body>
 </html>

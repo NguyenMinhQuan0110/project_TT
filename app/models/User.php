@@ -1,9 +1,5 @@
 <?php
 class User extends Model {
-    public function getUsers() {
-        $this->db->query("call get30User()");
-        return $this->db->resultSet();
-    }
     public function getTotalAllUser(){
         $this->db->query("call getTotalAllUser()");
         $row= $this->db->single();

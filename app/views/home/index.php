@@ -40,15 +40,15 @@
                 </thead>
                 <tbody>
                     <?php $stt=1 ?>
-                    <?php foreach($data['users'] as $user) : ?>
+                    <?php foreach($data['dons'] as $don) : ?>
                         <tr>
                             <td><?php echo $stt++; ?></td>
-                            <td><?php echo $user->id; ?></td>
-                            <td><?php echo $user->id; ?></td>
-                            <td><?php echo $user->id; ?></td>
-                            <td style="font-weight: bold;"><?php echo $user->id; ?></td>
-                            <td><?php echo $user->id; ?></td>
-                            <td style="font-weight: bold;"><?php echo $user->id; ?></td>
+                            <td><?php echo $don->username; ?></td>
+                            <td><?php echo $don->loaidon; ?></td>
+                            <td><?php echo $don->ngaytao; ?></td>
+                            <td style="font-weight: bold;"><?php echo $don->trangthai; ?></td>
+                            <td><?php echo $don->ngayduyet; ?></td>
+                            <td style="font-weight: bold;"><?php echo $don->title; ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

@@ -21,11 +21,6 @@ class HomeController extends Controller {
                 $_SESSION["loai_user"]=$userlogin->loaiuser;
                 $_SESSION["phong_ban"]=$userlogin->phongban;
                 $_SESSION["user_id"]=$userlogin->id;
-                $users = $this->userModel->getUsers();
-                $data = [
-                    'title' => 'Trang chủ',
-                    'users' => $users
-                ];
                 header("Location: " . URLROOT . "/home/index");
                 exit();
             }else{
@@ -43,9 +38,9 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        $users=$this->userModel->getUsers();
+        $dons=$this->donModel->get30Don();
         $data=[
-            "users"=> $users
+            "dons"=> $dons
         ];
         $this->view('home/index',$data);
     }
@@ -239,5 +234,8 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/formlistuser");
             exit();
         }
+    }
+    public function page404(){
+        $this->view("/manhinhloi");
     }
 }

@@ -1,18 +1,37 @@
 <?php
 class Don extends Model{
+    public function get30Don() {
+        $this->db->query("call get30Don()");
+        return $this->db->resultSet();
+    }
     public function getUserByLoaiUserAndPhongBan($loaiuser,$phongban){
         $this->db->query("call getUserByLoaiUserAndPhongBan(:loaiuser,:phongban)");
         $this->db->bind(":loaiuser",$loaiuser);
         $this->db->bind(":phongban",$phongban);
         return $this->db->resultSet();
     }
-    public function getTotalAllDon(){
-        $this->db->query("call getTotalAllDon()");
+    public function getTotalAllDonByNguoiDuyet($nguoiduyet){
+        $this->db->query("call getTotalAllDonByNguoiDuyet(:nguoiduyet)");
+        $this->db->bind(":nguoiduyet",$nguoiduyet);
         $row= $this->db->single();
         return $row->toltal;
     }
-    public function getAllDon($limits, $offsets){
-        $this->db->query("call getAllDon(:limits,:offsets)");
+    public function getAllDonByNguoiDuyet($limits, $offsets,$nguoiduyet){
+        $this->db->query("call getAllDonByNguoiDuyet(:limits,:offsets,:nguoiduyet)");
+        $this->db->bind(":limits",$limits);
+        $this->db->bind(":offsets",$offsets);
+        $this->db->bind(":nguoiduyet",$nguoiduyet);
+        return $this->db->resultSet();
+    }
+    public function getTotalSearchDon($keyword){
+        $this->db->query("call getTotalSearchDon(:keyword)");
+        $this->db->bind(":keyword",$keyword);
+        $row= $this->db->single();
+        return $row->toltal;
+    }
+    public function searchDon($keyword,$limits,$offsets){
+        $this->db->query("call searchDon(:keyword,:limits,:offsets)");
+        $this->db->bind(":keyword",$keyword);
         $this->db->bind(":limits",$limits);
         $this->db->bind(":offsets",$offsets);
         return $this->db->resultSet();

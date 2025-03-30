@@ -1,21 +1,35 @@
 <?php
 class App {
-    protected $controller = 'Home';
-    protected $method = 'showFormlogin';
+    protected $controller = 'HomeController'; 
+    protected $method = 'showFormlogin';      
     protected $params = [];
 
     public function __construct() {
         $url = $this->parseUrl();
 
+        if (empty($url)) {
+            require_once APPROOT . '/app/controllers/' . $this->controller . '.php';
+            $this->controller = new $this->controller();
+            call_user_func_array([$this->controller, $this->method], $this->params);
+            return;
+        }
+
         // Xử lý controller
-        if (isset($url[0]) && file_exists(APPROOT .'/app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {//hàm $url[0] để viết hoa chữ cái đầu của chuỗi
+        if (isset($url[0]) && file_exists(APPROOT . '/app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
             $this->controller = ucfirst($url[0]) . 'Controller';
             unset($url[0]);
         } else {
+            // Nếu controller không tồn tại, chuyển về HomeController và method page404
             $this->controller = 'HomeController';
+            $this->method = 'page404';
+            $this->params = [];
+            require_once APPROOT . '/app/controllers/' . $this->controller . '.php';
+            $this->controller = new $this->controller();
+            call_user_func_array([$this->controller, $this->method], $this->params);
+            return;
         }
 
-        // Thay đổi đường dẫn require_once để phù hợp
+        // Load controller file và khởi tạo instance
         require_once APPROOT . '/app/controllers/' . $this->controller . '.php';
         $this->controller = new $this->controller();
 
@@ -23,6 +37,9 @@ class App {
         if (isset($url[1]) && method_exists($this->controller, $url[1])) {
             $this->method = $url[1];
             unset($url[1]);
+        } else if (isset($url[1])) {
+            // Nếu method không tồn tại trong controller đã tồn tại, chuyển về page404
+            $this->method = 'page404';
         }
 
         // Xử lý params

@@ -21,9 +21,9 @@ class DonController extends Controller{
         $limit=5;
         $page=isset($_GET["page"])?$_GET["page"]:1;
         $offset=($page - 1) * $limit;
-        $tottalDon=$this->donModel->getTotalAllDon();
+        $tottalDon=$this->donModel->getTotalAllDonByNguoiDuyet($_SESSION["user_id"]);
         $totalPages = ceil($tottalDon / $limit);
-        $dons=$this->donModel->getAllDon($limit,$offset);
+        $dons=$this->donModel->getAllDonByNguoiDuyet($limit,$offset,$_SESSION["user_id"]);
         $data=[
             "tottalDon"=>$tottalDon,
             "dons" => $dons,
@@ -32,6 +32,34 @@ class DonController extends Controller{
             "limit"=>$limit
         ];
         $this->view("don/index",$data);
+    }
+    public function searchDon(){
+        if(!isset($_SESSION["user_name"])){
+            header("Location: " . URLROOT . "/home/showFormlogin");
+            exit();
+        }
+        $keyword = $_GET["keyword"];
+        $limit = 5; // Số lượng người dùng trên mỗi trang
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Lấy số trang từ query string
+        $offset = ($page - 1) * $limit; // Tính vị trí bắt đầu
+
+        if ($keyword) {
+            $dons = $this->donModel->searchDon($keyword, $limit, $offset); // Cần thêm phương thức này trong model
+            $totalDon = $this->donModel->getTotalSearchDon($keyword); // Cần thêm phương thức này trong model
+            $totalPages = ceil($totalDon / $limit);
+
+            $data = [
+                "dons" => $dons,
+                "currentPage" => $page,
+                "totalPages" => $totalPages,
+                "keyword" => $keyword,
+                "limit"=>$limit
+            ];
+            $this->view("don/index", $data);
+        } else {
+            header("Location: " . URLROOT . "/don/index");
+            exit();
+        }
     }
     public function showForminsert(){
         if(!isset($_SESSION["user_name"])){
@@ -200,5 +228,7 @@ class DonController extends Controller{
             error_log("Không thể gửi email: {$mail->ErrorInfo}");
         }
     }
-           
+    public function page404(){
+        $this->view("/manhinhloi");
+    }      
 }
