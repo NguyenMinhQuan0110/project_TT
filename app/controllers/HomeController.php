@@ -17,12 +17,17 @@ class HomeController extends Controller {
 
             $userlogin= $this->userModel->getUserByLoginNameAndPassword($loginname,$password);
             if($userlogin){
-                $_SESSION["user_name"]=$userlogin->username;
-                $_SESSION["loai_user"]=$userlogin->loaiuser;
-                $_SESSION["phong_ban"]=$userlogin->phongban;
-                $_SESSION["user_id"]=$userlogin->id;
-                header("Location: " . URLROOT . "/home/index");
-                exit();
+                if ($userlogin->trangthai != "Đã khóa") {
+                    $_SESSION["user_name"] = $userlogin->username;
+                    $_SESSION["loai_user"] = $userlogin->loaiuser;
+                    $_SESSION["phong_ban"] = $userlogin->phongban;
+                    $_SESSION["user_id"] = $userlogin->id;
+                    header("Location: " . URLROOT . "/home/index");
+                    exit();
+                } else {
+                    $data = ['msg' => '※Người dùng này đã bị khóa'];
+                    $this->view("/login", $data);
+                }
             }else{
                 $data=['msg'=>'※Tên đăng nhập hoặc mật khẩu lỗi. Vui lòng thử lại'];
                 $this->view("/login",$data);
@@ -75,7 +80,7 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]!="quản lý"){
+        if($_SESSION["loai_user"]=="người dùng"){
             $_SESSION["message"] = "Mày đéo có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
@@ -87,7 +92,7 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]!="quản lý"){
+        if($_SESSION["loai_user"]=="người dùng"){
             $_SESSION["message"] = "Mày đéo có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
@@ -118,8 +123,8 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]!="quản lý"){
-            $_SESSION["message"] = "Mày đéo có quyền!";
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
         }
@@ -134,8 +139,8 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]!="quản lý"){
-            $_SESSION["message"] = "Mày đéo có quyền!";
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
         }
@@ -158,6 +163,12 @@ class HomeController extends Controller {
             $trangthai="Đang hoạt động";
         }
         if($password && $username && $loginname && $email && $birthday && $loaiuser && $phongban && $id){
+            $nguoidung=$this->userModel->getUserById($id);
+            if($_SESSION["loai_user"]==$nguoidung->loaiuser || $_SESSION["phong_ban"]!=$nguoidung->phongban){
+                $_SESSION["message"] = "Bạn không có quyền!";
+                header("Location: " . URLROOT . "/home/index");
+                exit();
+            }
             $updateUser=$this->userModel->updateUser($id,$loginname,$username,$password,$email,$loaiuser,$phongban,$birthday,$trangthai);
             if($updateUser){
                 $_SESSION["message"] = "Sửa thành công người dùng!";
@@ -176,8 +187,8 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]!="quản lý"){
-            $_SESSION["message"] = "Mày đéo có quyền!";
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
         }
@@ -220,8 +231,8 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]!="quản lý"){
-            $_SESSION["message"] = "Mày đéo có quyền!";
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
         }

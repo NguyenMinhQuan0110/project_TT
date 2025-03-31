@@ -48,15 +48,15 @@
                 <?php $stt=$data['limit']*($data['currentPage']-1)+1; ?>
                 <?php foreach($data['dons'] as $don) : ?>
                         <tr style="background-color:<?php if($don->trangthai=="chưa duyệt"){echo "#90FF98";}elseif($don->trangthai=="đã hủy"){echo "#FFB5B5";} ?>;">
-                            <td><?php echo $stt++ ?></td>
-                            <td><?php echo $don->username ?></td>
-                            <td><?php echo $don->loaidon?></td>
-                            <td><?php echo $don->ngaytao?></td>
-                            <td><?php echo $don->trangthai ?></td>
-                            <td><?php echo $don->ngayduyet ?></td> 
-                            <td style="display: flex;justify-content: space-between; /* Đẩy nội dung và nút sang hai phía */"><span> <?php echo $don->title ?></span>
+                            <td><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $stt++ ?></a></td>
+                            <td><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->username ?></a></td>
+                            <td><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->loaidon?></a></td>
+                            <td><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->ngaytao?></a></td>
+                            <td><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->trangthai ?></a></td>
+                            <td><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->ngayduyet ?></a></td> 
+                            <td style="display: flex;justify-content: space-between; /* Đẩy nội dung và nút sang hai phía */"><span><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->title ?></a></span>
                                 <div class="buttons" style="display: <?php if($don->trangthai!="chưa duyệt"){echo "none";} ?>;">
-                                    <a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>"><button style="background-color: #14AE5C;">Duyệt</button></a>
+                                    <a href="<?php echo URLROOT ?>/don/getDonByIdDuyetNhanh/<?php echo $don->id ?>"><button style="background-color: #14AE5C;">Duyệt</button></a>
                                     <a href="<?php echo URLROOT ?>/don/getDonByIdHuy/<?php echo $don->id ?>"><button style="background-color: #EC221F;">Hủy</button></a>
                                 </div>
                             </td>

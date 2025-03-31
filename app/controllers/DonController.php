@@ -134,6 +134,17 @@ class DonController extends Controller{
         ];
         $this->view("don/huy",$data);
     }
+    public function getDonByIdDuyetNhanh($id){
+        if(!isset($_SESSION["user_name"])){
+            header("Location: " . URLROOT . "/home/showFormlogin");
+            exit();
+        }
+        $don=$this->donModel->getDonById($id);
+        $data=[
+            "don"=>$don
+        ];
+        $this->view("don/duyetnhanh",$data);
+    }
     public function duyetdon(){
         if(!isset($_SESSION["user_name"])){
             header("Location: " . URLROOT . "/home/showFormlogin");
@@ -210,7 +221,6 @@ class DonController extends Controller{
             // Nội dung Email
             $mail->isHTML(true);
             $mail->Subject = 'Sanshin';
-            // Xây dựng nội dung Body động
             $body = "<p>Xin chào,</p>";
             if (!empty($noidung)) {
                 $body .= "<p>$noidung.</p>";

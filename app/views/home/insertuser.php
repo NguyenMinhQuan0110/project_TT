@@ -37,7 +37,7 @@
                 <div>
                     <label for="username">Mật khẩu <span style="color: red;">*</span></label>
                     <input type="password" id="password" name="password"  style="margin-left: 68px;">
-                    <span class="error" id="passwordError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Mật khẩu phải có ít nhất 6 kí tự</span>
+                    <span class="error" id="passwordError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Mật khẩu có 8 ký tự bao gồm ký tự chữ, số, đặc biệt</span>
                 </div>
                 <div>
                     <label for="username">Email </label>
@@ -98,7 +98,8 @@
                     document.getElementById("username").style.border="1px solid";
                 }
                 const password=document.getElementById("password").value;
-                if(password.length<6){
+                let regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if(!regex.test(password)){
                     document.getElementById("passwordError").style.display="flex";
                     document.getElementById("password").style.border="1px solid red";
                     return;

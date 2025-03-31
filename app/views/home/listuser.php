@@ -58,7 +58,7 @@
                     <td><?php echo $user->trangthai ?></td>
                     <td>
                         <a href="<?php echo URLROOT ?>/home/getUserById/<?php echo $user->id ?>"><button style="background-color: #14AE5C;">Sửa</button></a>
-                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>')"><button style="background-color: #EC221F;">Xóa</button></a>
+                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>')"><button style="background-color: #EC221F;display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>">Xóa</button></a>
                     </td>
                 </tr>
                 <script>
