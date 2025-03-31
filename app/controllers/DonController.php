@@ -123,6 +123,17 @@ class DonController extends Controller{
         ];
         $this->view("don/duyet_don",$data);
     }
+    public function getDonByIdHuy($id){
+        if(!isset($_SESSION["user_name"])){
+            header("Location: " . URLROOT . "/home/showFormlogin");
+            exit();
+        }
+        $don=$this->donModel->getDonById($id);
+        $data=[
+            "don"=>$don
+        ];
+        $this->view("don/huy",$data);
+    }
     public function duyetdon(){
         if(!isset($_SESSION["user_name"])){
             header("Location: " . URLROOT . "/home/showFormlogin");

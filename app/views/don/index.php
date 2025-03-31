@@ -57,12 +57,7 @@
                             <td style="display: flex;justify-content: space-between; /* Đẩy nội dung và nút sang hai phía */"><span> <?php echo $don->title ?></span>
                                 <div class="buttons" style="display: <?php if($don->trangthai!="chưa duyệt"){echo "none";} ?>;">
                                     <a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>"><button style="background-color: #14AE5C;">Duyệt</button></a>
-                                    <button style="background-color: #EC221F;" 
-                                    class="cancel-btn"
-                                    data-donid="<?php echo $don->id ?>"
-                                    data-userid="<?php echo $don->userid ?>"
-                                    data-title="<?php echo htmlspecialchars($don->title) ?>"
-                                    data-loaidon="<?php echo htmlspecialchars($don->loaidon) ?>">Hủy</button>
+                                    <a href="<?php echo URLROOT ?>/don/getDonByIdHuy/<?php echo $don->id ?>"><button style="background-color: #EC221F;">Hủy</button></a>
                                 </div>
                             </td>
                         </tr>

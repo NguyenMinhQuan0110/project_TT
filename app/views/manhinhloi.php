@@ -14,10 +14,10 @@
     <div class="than">
         <div class="menu">
             <ul>
-                <li class="dashboard"><a href="#">Trang chủ</a></li>
-                <li><a href="#">Quản lý người dùng</a></li>
-                <li><a href="#">Quản lý đơn</a></li>
-                <li><a href="#">Đăng xuất</a></li>
+            <li class="dashboard"><a href="<?php echo URLROOT ?>/home/index">Trang chủ</a></li>
+                <li><a href="<?php echo URLROOT ?>/home/formlistuser">Quản lý người dùng</a></li>
+                <li><a href="<?php echo URLROOT ?>/don/index">Quản lý đơn</a></li>
+                <li><a href="<?php echo URLROOT ?>/home/logout">Đăng xuất</a></li>
             </ul>
         </div>
         <h1>Có lỗi xảy ra</h1>
