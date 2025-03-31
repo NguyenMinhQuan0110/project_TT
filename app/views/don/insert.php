@@ -36,42 +36,49 @@
                 </div>
                 <div>
                     <label for="">Người duyệt <span style="color: red;">*</span></label>
-                    <select id="cars" style="margin-left: 52px;" name="nguoiduyet">
+                    <select id="nguoiduyet" style="margin-left: 52px;" name="nguoiduyet">
                         <option value=""></option>
                         <?php foreach($data["nguoiduyet"] as $user) : ?>
                         <option value="<?php echo $user->id ?>"><?php echo $user->username ?></option>
                         <?php endforeach;?>
                     </select>
+                    <span class="error" id="nguoiduyetError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Bạn phải chọn người duyệt</span>
                 </div>
                 <div>
                     <label for="loaidon">Loại đơn <span style="color: red;">*</span></label>
-                    <select id="cars" style="margin-left: 73px;" name="loaidon">
+                    <select id="loaidon" style="margin-left: 73px;" name="loaidon">
                         <option value=""></option>
                         <option value="Đơn nghỉ phép">Đơn nghỉ phép</option>
                         <option value="Đơn cấp vật tư máy móc">Đơn cấp vật tư máy móc</option>
                         <option value="Đơn thay đổi giờ làm">Đơn thay đổi giờ làm</option>
                         <option value="Đơn xin thanh toán công tác phí">Đơn xin thanh toán công tác phí</option>
                     </select>
+                    <span class="error" id="loaidonError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Bạn phải chọn loại đơn</span>
                 </div>
                 <div>
                     <label for="username">Ngày bắt đầu <span style="color: red;">*</span></label>
-                    <input type="date" id="username" name="startdate" required style="margin-left: 43px;">
+                    <input type="date" id="startdate" name="startdate" required style="margin-left: 43px;">
+                    <span class="error" id="startdateError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Bạn phải chọn loại đơn</span>
                 </div>
                 <div>
                     <label for="username">Ngày kết thúc <span style="color: red;">*</span></label>
-                    <input type="date" id="username" name="enddate" required style="margin-left: 38px;">
+                    <input type="date" id="enddate" name="enddate" required style="margin-left: 38px;">
+                    <span class="error" id="enddateError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Bạn phải chọn loại đơn</span>
                 </div>
                 <div class="file-upload-container">
                     <label for="file-upload" class="file-label">
                         Đính kèm <span class="required">*</span>
                     </label>
-                    <div class="custom-file-upload">
+                    <div class="custom-file-upload" id="boderfile_upload">
                         <span class="file-text"></span>
                         <span class="upload-icon" style="padding-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
                             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
                             <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
                           </svg></span> <!-- Biểu tượng kẹp giấy -->
-                        <input type="file" id="file-upload" name="dinhkem" onchange="updateFileName()">
+                        <input type="file" id="file_upload" name="dinhkem" onchange="updateFileName()">
+                    </div>
+                    <div>
+                        <span class="error" id="file_uploadError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Bạn phải chọn file đính kèm</span>
                     </div>
                 </div>              
                 <input type="submit" id="next_button" value="Tiếp theo">
@@ -94,6 +101,51 @@
                 }else{
                     document.getElementById("titleError").style.display="none";
                     document.getElementById("title").style.border="1px solid";
+                }
+                const nguoiduyet=document.getElementById("nguoiduyet").value;
+                if(nguoiduyet==""){
+                    document.getElementById("nguoiduyetError").style.display="flex";
+                    document.getElementById("nguoiduyet").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("nguoiduyetError").style.display="none";
+                    document.getElementById("nguoiduyet").style.border="1px solid";
+                }
+                const loaidon=document.getElementById("loaidon").value;
+                if(loaidon==""){
+                    document.getElementById("loaidonError").style.display="flex";
+                    document.getElementById("loaidon").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("loaidonError").style.display="none";
+                    document.getElementById("loaidon").style.border="1px solid";
+                }
+                const startdate=document.getElementById("startdate").value;
+                if(startdate==""){
+                    document.getElementById("startdateError").style.display="flex";
+                    document.getElementById("startdate").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("startdateError").style.display="none";
+                    document.getElementById("startdate").style.border="1px solid";
+                }
+                const enddate=document.getElementById("enddate").value;
+                if(enddate==""){
+                    document.getElementById("enddateError").style.display="flex";
+                    document.getElementById("enddate").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("enddateError").style.display="none";
+                    document.getElementById("enddate").style.border="1px solid";
+                }
+                const file_upload=document.getElementById("file_upload").value;
+                if(file_upload==""){
+                    document.getElementById("file_uploadError").style.display="flex";
+                    document.getElementById("boderfile_upload").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("file_uploadError").style.display="none";
+                    document.getElementById("boderfile_upload").style.border="1px solid";
                 }
                 const inputs= document.querySelectorAll("form input");
                 inputs.forEach(function(input){
