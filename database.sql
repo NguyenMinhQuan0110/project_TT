@@ -1,5 +1,12 @@
-DELIMITER $$
 
+--
+-- Cơ sở dữ liệu: `project_thuctap`
+--
+
+DELIMITER $$
+--
+-- Thủ tục
+--
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUserById` (IN `p_id` INT)   BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
@@ -35,7 +42,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get30Don` ()   BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllDonByNguoiDuyet` (IN `p_limits` INT, IN `p_offsets` INT, IN `p_nguoiduyet` INT)   BEGIN
-	SELECT users.username,dons.loaidon,dons.ngaytao,dons.trangthai,dons.enddate,dons.title,dons.id FROM dons INNER JOIN users ON users.id=dons.userid WHERE dons.nguoiduyet=p_nguoiduyet LIMIT p_limits OFFSET p_offsets;
+	SELECT users.username,dons.loaidon,dons.ngaytao,dons.trangthai,dons.ngayduyet,dons.title,dons.id FROM dons INNER JOIN users ON users.id=dons.userid WHERE dons.nguoiduyet=p_nguoiduyet LIMIT p_limits OFFSET p_offsets;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllUser` (IN `p_limits` INT, IN `p_offsets` INT)   BEGIN
@@ -170,6 +177,11 @@ END$$
 
 DELIMITER ;
 
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `dons`
+--
 
 CREATE TABLE `dons` (
   `id` int(11) NOT NULL,
@@ -186,6 +198,9 @@ CREATE TABLE `dons` (
   `ngayduyet` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Cấu trúc bảng cho bảng `users`
+--
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -200,25 +215,46 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+
+
+--
+-- Chỉ mục cho bảng `dons`
+--
 ALTER TABLE `dons`
   ADD PRIMARY KEY (`id`),
   ADD KEY `FK_nguoiduyet_id` (`nguoiduyet`),
   ADD KEY `FK_nguoitao_id` (`userid`);
 
-
+--
+-- Chỉ mục cho bảng `users`
+--
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `loginname` (`loginname`);
 
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
 
+--
+-- AUTO_INCREMENT cho bảng `dons`
+--
 ALTER TABLE `dons`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
-
+--
+-- AUTO_INCREMENT cho bảng `users`
+--
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
 
+--
+-- Các ràng buộc cho bảng `dons`
+--
 ALTER TABLE `dons`
   ADD CONSTRAINT `FK_nguoiduyet_id` FOREIGN KEY (`nguoiduyet`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `FK_nguoitao_id` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);

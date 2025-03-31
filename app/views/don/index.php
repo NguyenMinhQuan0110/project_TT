@@ -53,7 +53,7 @@
                             <td><?php echo $don->loaidon?></td>
                             <td><?php echo $don->ngaytao?></td>
                             <td><?php echo $don->trangthai ?></td>
-                            <td><?php echo $don->enddate ?></td> 
+                            <td><?php echo $don->ngayduyet ?></td> 
                             <td style="display: flex;justify-content: space-between; /* Đẩy nội dung và nút sang hai phía */"><span> <?php echo $don->title ?></span>
                                 <div class="buttons" style="display: <?php if($don->trangthai!="chưa duyệt"){echo "none";} ?>;">
                                     <a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>"><button style="background-color: #14AE5C;">Duyệt</button></a>
