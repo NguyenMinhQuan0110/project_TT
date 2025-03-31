@@ -27,7 +27,8 @@
                 <input type="hidden" value="<?php echo $_SESSION["user_id"] ?>" name="userid">
                 <div>
                     <label for="username">Tiêu đề <span style="color: red;">*</span></label>
-                    <input type="text" id="username" name="title" required style="margin-left: 84px;">
+                    <input type="text" id="title" name="title" required style="margin-left: 84px;">
+                    <span class="error" id="titleError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Tiêu đề không được để trống</span>
                 </div>
                 <div style="display: flex; align-items: flex-start;">
                     <label for="username" style="top: 0;">Nội dung </label>
@@ -85,6 +86,15 @@
             const deleteNullBtn=document.getElementById("delete_null_btn");
             if(!isSave){
                 e.preventDefault();//ngăn gửi form
+                const title=document.getElementById("title").value;
+                if(title==""){
+                    document.getElementById("titleError").style.display="flex";
+                    document.getElementById("title").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("titleError").style.display="none";
+                    document.getElementById("title").style.border="1px solid";
+                }
                 const inputs= document.querySelectorAll("form input");
                 inputs.forEach(function(input){
                     if(input.type!=="submit"&& input.type!=="button"){

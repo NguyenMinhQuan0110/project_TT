@@ -109,59 +109,89 @@
         </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function(){
-            const headerCheckBox=document.querySelector("th img");
-            const rowCheckBoxs=document.querySelectorAll("td img");
-            //Bắt sự kiện kick vào ảnh checkbox
-            headerCheckBox.addEventListener("click",function(){
-                let ischecked=headerCheckBox.getAttribute("src")==="<?php echo URLROOT ?>/image/checkbox.png";
-                //Đảo trạng thái checkbox ở header
-                headerCheckBox.setAttribute("src",ischecked?"<?php echo URLROOT ?>/image/checkked.png":"<?php echo URLROOT ?>/image/checkbox.png");
-                //Đảo trạng thái checkbox ở các dòng
-                rowCheckBoxs.forEach(function(item){
-                    item.setAttribute("src", ischecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
-                })
-            })
-            //Bắt sự kiện kick vào ảnh checkbox ở các dòng
-            rowCheckBoxs.forEach(function(item){
-                item.addEventListener("click",function(e){
-                    let ischecked=item.getAttribute("src")==="<?php echo URLROOT ?>/image/checkbox.png";
-                    item.setAttribute("src",ischecked?"<?php echo URLROOT ?>/image/checkked.png":"<?php echo URLROOT ?>/image/checkbox.png");
-                })
-            })
-        })
         document.addEventListener("DOMContentLoaded", function() {
-            // Nút thực hiện hành động, ví dụ: "Xóa nhiều"
-            const deleteMultipleBtn = document.getElementById("deleteMultipleBtn");
+            // Khôi phục trạng thái từ sessionStorage (hoặc localStorage nếu bạn muốn)
+            const selectedUsers = JSON.parse(sessionStorage.getItem("selectedUsers")) || []; // Mảng object {id, username}
+            const headerCheckBox = document.querySelector("th img");
+            const rowCheckBoxes = document.querySelectorAll("td img");
 
-            deleteMultipleBtn.addEventListener("click", function() {
-                const checkedIds = []; // Mảng lưu trữ ID của các dòng được tick
-                const listuserName=[];
-                const rows = document.querySelectorAll("table tr:not(:first-child)"); // Lấy tất cả các dòng (trừ tiêu đề)
+            // Khôi phục trạng thái checkbox cho các dòng
+            rowCheckBoxes.forEach(function(item) {
+                const row = item.closest("tr");
+                const id = row.children[1].textContent; // Cột ID
+                if (selectedUsers.some(user => user.id === id)) {
+                    item.setAttribute("src", "<?php echo URLROOT ?>/image/checkked.png");
+                }
+            });
 
-                rows.forEach(function(row) {
-                    const checkboxImg = row.querySelector("td img"); // Lấy ảnh checkbox trong dòng
-                    const isChecked = checkboxImg.getAttribute("src") === "<?php echo URLROOT ?>/image/checkked.png";
-                    
+            // Bắt sự kiện click vào checkbox header
+            headerCheckBox.addEventListener("click", function() {
+                let isChecked = headerCheckBox.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
+                headerCheckBox.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
+
+                rowCheckBoxes.forEach(function(item) {
+                    const row = item.closest("tr");
+                    const id = row.children[1].textContent;
+                    const username = row.children[2].textContent; // Cột Username
+                    item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
+
+                    // Cập nhật danh sách selectedUsers
                     if (isChecked) {
-                        const id = row.children[1].textContent; // Lấy giá trị ID từ cột thứ 2 (cột Mã người dùng)
-                        checkedIds.push(id);
-                        const user_name=row.children[2].textContent;
-                        listuserName.push(user_name);
+                        if (!selectedUsers.some(user => user.id === id)) {
+                            selectedUsers.push({ id: id, username: username });
+                        }
+                    } else {
+                        const index = selectedUsers.findIndex(user => user.id === id);
+                        if (index > -1) selectedUsers.splice(index, 1);
                     }
                 });
-                if (checkedIds.length < 2) {
+                sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
+            });
+
+            // Bắt sự kiện click vào checkbox ở các dòng
+            rowCheckBoxes.forEach(function(item) {
+                item.addEventListener("click", function(e) {
+                    const row = item.closest("tr");
+                    const id = row.children[1].textContent;
+                    const username = row.children[2].textContent;
+                    let isChecked = item.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
+                    item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
+
+                    // Cập nhật danh sách selectedUsers
+                    if (isChecked) {
+                        if (!selectedUsers.some(user => user.id === id)) {
+                            selectedUsers.push({ id: id, username: username });
+                        }
+                    } else {
+                        const index = selectedUsers.findIndex(user => user.id === id);
+                        if (index > -1) selectedUsers.splice(index, 1);
+                    }
+                    sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
+        rubble });
+            });
+
+            // Xử lý nút "Xóa nhiều"
+            const deleteMultipleBtn = document.getElementById("deleteMultipleBtn");
+            deleteMultipleBtn.addEventListener("click", function() {
+                if (selectedUsers.length < 2) {
                     alert("Vui lòng chọn ít nhất 2 người dùng để xóa!");
                     return;
                 }
 
-                if (!confirm("Bạn có chắc muốn xóa những người dùng nay:"+ listuserName +" ?")) {
+                // Lấy danh sách tất cả username từ selectedUsers (bao gồm các trang khác)
+                const listUserNames = selectedUsers.map(user => user.username);
+
+                if (!confirm("Bạn có chắc muốn xóa những người dùng này: " + listUserNames.join(", ") + " ?")) {
                     return;
                 }
 
-                document.getElementById("idsInput").value = JSON.stringify(checkedIds);//chuyển mảng thành chuỗi rồi chuyền cho input idsInput
+                // Chỉ gửi mảng ID qua form
+                const selectedIds = selectedUsers.map(user => user.id);
+                document.getElementById("idsInput").value = JSON.stringify(selectedIds);
                 document.getElementById("deleteMultipleForm").submit();
 
+                // Xóa danh sách đã chọn khỏi sessionStorage sau khi submit
+                sessionStorage.removeItem("selectedUsers");
             });
         });
     </script>
