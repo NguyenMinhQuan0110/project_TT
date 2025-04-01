@@ -164,10 +164,12 @@ class HomeController extends Controller {
         }
         if($password && $username && $loginname && $email && $birthday && $loaiuser && $phongban && $id){
             $nguoidung=$this->userModel->getUserById($id);
-            if($_SESSION["loai_user"]==$nguoidung->loaiuser || $_SESSION["phong_ban"]!=$nguoidung->phongban){
-                $_SESSION["message"] = "Bạn không có quyền!";
-                header("Location: " . URLROOT . "/home/index");
-                exit();
+            if($_SESSION["loai_user"]!="admin"){
+                if($_SESSION["loai_user"]==$nguoidung->loaiuser || $_SESSION["phong_ban"]!=$nguoidung->phongban){
+                    $_SESSION["message"] = "Bạn không có quyền!";
+                    header("Location: " . URLROOT . "/home/index");
+                    exit();
+                }
             }
             $updateUser=$this->userModel->updateUser($id,$loginname,$username,$password,$email,$loaiuser,$phongban,$birthday,$trangthai);
             if($updateUser){
