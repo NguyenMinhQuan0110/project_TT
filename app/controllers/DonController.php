@@ -21,9 +21,9 @@ class DonController extends Controller{
         $limit=5;
         $page=isset($_GET["page"])?$_GET["page"]:1;
         $offset=($page - 1) * $limit;
-        $tottalDon=$this->donModel->getTotalAllDonByNguoiDuyet($_SESSION["user_id"]);
+        $tottalDon=$this->donModel->getTotalAllDon();
         $totalPages = ceil($tottalDon / $limit);
-        $dons=$this->donModel->getAllDonByNguoiDuyet($limit,$offset,$_SESSION["user_id"]);
+        $dons=$this->donModel->getAllDon($limit,$offset);
         $data=[
             "tottalDon"=>$tottalDon,
             "dons" => $dons,
@@ -117,6 +117,11 @@ class DonController extends Controller{
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
+            header("Location: " . URLROOT . "/don/index");
+            exit();
+        }
         $don=$this->donModel->getDonById($id);
         $data=[
             "don"=>$don
@@ -128,6 +133,11 @@ class DonController extends Controller{
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
+            header("Location: " . URLROOT . "/home/index");
+            exit();
+        }
         $don=$this->donModel->getDonById($id);
         $data=[
             "don"=>$don
@@ -137,6 +147,11 @@ class DonController extends Controller{
     public function getDonByIdDuyetNhanh($id){
         if(!isset($_SESSION["user_name"])){
             header("Location: " . URLROOT . "/home/showFormlogin");
+            exit();
+        }
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
+            header("Location: " . URLROOT . "/home/index");
             exit();
         }
         $don=$this->donModel->getDonById($id);
@@ -156,11 +171,17 @@ class DonController extends Controller{
         $loaidon=$_POST["loaidon"];
         $trangthai="đã duyệt";
         $ngayduyet=date("Y-m-d");
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
+            header("Location: " . URLROOT . "/home/index");
+            exit();
+        }
         $donduyet=$this->donModel->duyetdon($trangthai,$donid,$ngayduyet);
         if(!$donduyet){
             $data = ["error" => "Duyệt đơn thất bại!"];
             $this->view("don/duyet_don", $data);
         }
+        
         $nguoitao=$this->userModel->getUserById($userid);
         if ($nguoitao) {
             $this->sendEmailNotification($nguoitao->email, $title, $loaidon, $_SESSION["user_name"],"<strong>Đơn của bạn đã được duyệt</strong>","","");
@@ -182,6 +203,11 @@ class DonController extends Controller{
         $lydohuy=$_POST["lydohuy"];
         $trangthai="đã hủy";
         $ngayduyet=date("Y-m-d");
+        if($_SESSION["loai_user"]=="người dùng"){
+            $_SESSION["message"] = "Bạn không có quyền!";
+            header("Location: " . URLROOT . "/home/index");
+            exit();
+        }
         $donduyet=$this->donModel->duyetdon($trangthai,$donid,$ngayduyet);
         if(!$donduyet){
             $data = ["error" => "Duyệt đơn thất bại!"];

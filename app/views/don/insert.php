@@ -87,142 +87,140 @@
         </div>
     </div>
     <script>
-        let isSave=false;
-        document.getElementById("next_button").addEventListener("click", function(e){
-            const nextButton=document.getElementById("next_button");
-            const deleteNullBtn=document.getElementById("delete_null_btn");
-            if(!isSave){
+        let isSave = false;
+        document.getElementById("next_button").addEventListener("click", function(e) {
+            const nextButton = document.getElementById("next_button");
+            const deleteNullBtn = document.getElementById("delete_null_btn");
+            if (!isSave) {
                 e.preventDefault();//ngăn gửi form
-                const title=document.getElementById("title").value;
-                if(title==""){
-                    document.getElementById("titleError").style.display="flex";
-                    document.getElementById("title").style.border="1px solid red";
+                const title = document.getElementById("title").value;
+                if (title == "") {
+                    document.getElementById("titleError").style.display = "flex";
+                    document.getElementById("title").style.border = "1px solid red";
                     return;
-                }else{
-                    document.getElementById("titleError").style.display="none";
-                    document.getElementById("title").style.border="1px solid";
+                } else {
+                    document.getElementById("titleError").style.display = "none";
+                    document.getElementById("title").style.border = "1px solid";
                 }
-                const nguoiduyet=document.getElementById("nguoiduyet").value;
-                if(nguoiduyet==""){
-                    document.getElementById("nguoiduyetError").style.display="flex";
-                    document.getElementById("nguoiduyet").style.border="1px solid red";
+                const nguoiduyet = document.getElementById("nguoiduyet").value;
+                if (nguoiduyet == "") {
+                    document.getElementById("nguoiduyetError").style.display = "flex";
+                    document.getElementById("nguoiduyet").style.border = "1px solid red";
                     return;
-                }else{
-                    document.getElementById("nguoiduyetError").style.display="none";
-                    document.getElementById("nguoiduyet").style.border="1px solid";
+                } else {
+                    document.getElementById("nguoiduyetError").style.display = "none";
+                    document.getElementById("nguoiduyet").style.border = "1px solid";
                 }
-                const loaidon=document.getElementById("loaidon").value;
-                if(loaidon==""){
-                    document.getElementById("loaidonError").style.display="flex";
-                    document.getElementById("loaidon").style.border="1px solid red";
+                const loaidon = document.getElementById("loaidon").value;
+                if (loaidon == "") {
+                    document.getElementById("loaidonError").style.display = "flex";
+                    document.getElementById("loaidon").style.border = "1px solid red";
                     return;
-                }else{
-                    document.getElementById("loaidonError").style.display="none";
-                    document.getElementById("loaidon").style.border="1px solid";
+                } else {
+                    document.getElementById("loaidonError").style.display = "none";
+                    document.getElementById("loaidon").style.border = "1px solid";
                 }
-                const startdate=document.getElementById("startdate").value;
-                if(startdate==""){
-                    document.getElementById("startdateError").style.display="flex";
-                    document.getElementById("startdate").style.border="1px solid red";
+                const startdate = document.getElementById("startdate").value;
+                if (startdate == "") {
+                    document.getElementById("startdateError").style.display = "flex";
+                    document.getElementById("startdate").style.border = "1px solid red";
                     return;
-                }else{
-                    document.getElementById("startdateError").style.display="none";
-                    document.getElementById("startdate").style.border="1px solid";
+                } else {
+                    document.getElementById("startdateError").style.display = "none";
+                    document.getElementById("startdate").style.border = "1px solid";
                 }
-                const enddate=document.getElementById("enddate").value;
-                if(enddate==""){
-                    document.getElementById("enddateError").style.display="flex";
-                    document.getElementById("enddate").style.border="1px solid red";
+                const enddate = document.getElementById("enddate").value;
+                if (enddate == "") {
+                    document.getElementById("enddateError").style.display = "flex";
+                    document.getElementById("enddate").style.border = "1px solid red";
                     return;
-                }else{
-                    document.getElementById("enddateError").style.display="none";
-                    document.getElementById("enddate").style.border="1px solid";
+                } else {
+                    document.getElementById("enddateError").style.display = "none";
+                    document.getElementById("enddate").style.border = "1px solid";
                 }
-                const file_upload=document.getElementById("file_upload").value;
-                if(file_upload==""){
-                    document.getElementById("file_uploadError").style.display="flex";
-                    document.getElementById("boderfile_upload").style.border="1px solid red";
+                const file_upload = document.getElementById("file_upload").value;
+                if (file_upload == "") {
+                    document.getElementById("file_uploadError").style.display = "flex";
+                    document.getElementById("boderfile_upload").style.border = "1px solid red";
                     return;
-                }else{
-                    document.getElementById("file_uploadError").style.display="none";
-                    document.getElementById("boderfile_upload").style.border="1px solid";
+                } else {
+                    document.getElementById("file_uploadError").style.display = "none";
+                    document.getElementById("boderfile_upload").style.border = "1px solid";
                 }
-                const inputs= document.querySelectorAll("form input");
-                inputs.forEach(function(input){
-                    if(input.type!=="submit"&& input.type!=="button"){
-                        input.style.backgroundColor="#CCCCCC";
-                        input.setAttribute("readonly","true");
+                const inputs = document.querySelectorAll("form input");
+                inputs.forEach(function(input) {
+                    if (input.type !== "submit" && input.type !== "button") {
+                        input.style.backgroundColor = "#CCCCCC";
+                        input.setAttribute("readonly", "true");
                     }
                 })
-                const selects=document.querySelectorAll("form select");
-                selects.forEach(function(select){
-                    select.style.backgroundColor="#CCCCCC";
-                    select.setAttribute("disabled","true");
+                const selects = document.querySelectorAll("form select");
+                selects.forEach(function(select) {
+                    select.style.backgroundColor = "#CCCCCC";
+                    select.setAttribute("disabled", "true");
                 })
-                const textarea =document.querySelector("textarea");
-                textarea.style.backgroundColor="#CCCCCC";
-                textarea.setAttribute("readonly","true");
+                const textarea = document.querySelector("textarea");
+                textarea.style.backgroundColor = "#CCCCCC";
+                textarea.setAttribute("readonly", "true");
                 // 🔹 Vô hiệu hóa ô tải file
-                const fileUploadBox = document.querySelector(".custom-file-upload"); // Lấy div bọc input file
-                const fileInput = document.getElementById("file-upload");
+                const fileUploadBox = document.querySelector(".custom-file-upload");
+                const fileInput = document.getElementById("file_upload"); // Sửa ID đúng ở đây
                 fileUploadBox.style.backgroundColor = "#CCCCCC";
-                fileUploadBox.style.pointerEvents = "none"; // Không cho click
+                fileUploadBox.style.pointerEvents = "none";
                 fileInput.setAttribute("disabled", "true");
-                nextButton.value="Lưu lai";
-                deleteNullBtn.value="Quay lại"
-                isSave=true;
-            }else{
-                const selects=document.querySelectorAll("form select");
-                selects.forEach(function(select){
-                    select.style.backgroundColor="#FFFFFF";
+                nextButton.value = "Lưu lại"; // Sửa lỗi chính tả
+                deleteNullBtn.value = "Quay lại"
+                isSave = true;
+            } else {
+                // Quan trọng: Enable lại tất cả trường bị disabled trước khi submit
+                const selects = document.querySelectorAll("form select");
+                selects.forEach(function(select) {
                     select.removeAttribute("disabled");
                 });
-                const textarea =document.querySelector("textarea");
-                textarea.style.backgroundColor="#FFFFFF";
-                textarea.removeAttribute("readonly");
-                const fileUploadBox = document.querySelector(".custom-file-upload"); // Lấy div bọc input file
-                const fileInput = document.getElementById("file-upload");
-                fileUploadBox.style.backgroundColor = "#FFFFFF";
-                fileUploadBox.style.pointerEvents = "auto"; // Cho click
+                
+                const fileInput = document.getElementById("file_upload"); // Sửa ID đúng
                 fileInput.removeAttribute("disabled");
-                //cho gửi form nếu nhấn lần 1 bào button id=next_button
+                
+                // Cho submit form
                 document.querySelector("form").submit();
             }
-        })
-        document.getElementById("delete_null_btn").addEventListener("click", function(e){
-            const nextButton=document.getElementById("next_button");
-            const deleteNullBtn=document.getElementById("delete_null_btn");
-            if(isSave){
-                const inputs=document.querySelectorAll("form input");
-                inputs.forEach(function(input){
-                    if(input.type!=="submit"&& input.type!=="button"){
-                        input.style.backgroundColor="#FFFFFF";
+        });
+
+        document.getElementById("delete_null_btn").addEventListener("click", function(e) {
+            const nextButton = document.getElementById("next_button");
+            const deleteNullBtn = document.getElementById("delete_null_btn");
+            if (isSave) {
+                const inputs = document.querySelectorAll("form input");
+                inputs.forEach(function(input) {
+                    if (input.type !== "submit" && input.type !== "button") {
+                        input.style.backgroundColor = "#FFFFFF";
                         input.removeAttribute("readonly");
                     }
                 });
-                const selects=document.querySelectorAll("form select");
-                selects.forEach(function(select){
-                    select.style.backgroundColor="#FFFFFF";
+                const selects = document.querySelectorAll("form select");
+                selects.forEach(function(select) {
+                    select.style.backgroundColor = "#FFFFFF";
                     select.removeAttribute("disabled");
                 });
-                const textarea =document.querySelector("textarea");
-                textarea.style.backgroundColor="#FFFFFF";
+                const textarea = document.querySelector("textarea");
+                textarea.style.backgroundColor = "#FFFFFF";
                 textarea.removeAttribute("readonly");
-                const fileUploadBox = document.querySelector(".custom-file-upload"); // Lấy div bọc input file
-                const fileInput = document.getElementById("file-upload");
+                const fileUploadBox = document.querySelector(".custom-file-upload");
+                const fileInput = document.getElementById("file_upload"); // Sửa ID đúng
                 fileUploadBox.style.backgroundColor = "#FFFFFF";
-                fileUploadBox.style.pointerEvents = "auto"; // Cho click
+                fileUploadBox.style.pointerEvents = "auto";
                 fileInput.removeAttribute("disabled");
-                nextButton.value="Tiếp theo";
-                deleteNullBtn.value="Xóa trắng";
-                isSave=false;
-            }else{
-                //load lại trang 
+                nextButton.value = "Tiếp theo";
+                deleteNullBtn.value = "Xóa trắng";
+                isSave = false;
+            } else {
+                // Load lại trang
                 location.reload();
             }
-        })
+        });
+
         function updateFileName() {
-            const input = document.getElementById("file-upload");
+            const input = document.getElementById("file_upload");
             const fileName = input.files.length > 0 ? input.files[0].name : "";
             document.querySelector(".file-text").textContent = fileName;
         }

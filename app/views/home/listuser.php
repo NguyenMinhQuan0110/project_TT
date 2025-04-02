@@ -5,6 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List user</title>
     <link rel="stylesheet" href="<?php echo URLROOT ?>/css/list_form.css">
+    <style>
+        .delete-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background-color: white;
+        border-radius: 5px;
+        width: 400px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        overflow: hidden; /* Đảm bảo các góc bo tròn không bị tràn */
+    }
+
+    .modal-header {
+        background-color: #007EC6; /* Màu xanh dương đậm */
+        color: white;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .close-modal {
+        cursor: pointer;
+        font-size: 20px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .close-modal:hover {
+        color: #ddd;
+    }
+
+    .modal-body {
+        padding: 20px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 10px 15px;
+        border-top: 1px solid #ddd;
+    }
+
+    .btn-ok {
+        background-color: #007EC6; /* Màu xanh dương */
+        color: white;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-ok:hover {
+        background-color: #007EC6;
+    }
+
+    .btn-cancel {
+        background-color: #FF3333; /* Màu đỏ */
+        color: white;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-cancel:hover {
+        background-color: #e62e2e;
+    }
+    </style>
 </head>
 <body>
     <header>
@@ -34,8 +124,8 @@
                     <input type="text" name="keyword">
                     <input type="submit" value="Tìm kiếm">
                 </form>
-                <a href="<?php echo URLROOT ?>/home/showforminsertuser"><button style="background-color: #007EC6;">Thêm mới</button></a>
-                <button id="deleteMultipleBtn" style="background-color: #EC221F; margin-left: 18px;">Xóa nhiều</button>
+                <a href="<?php echo URLROOT ?>/home/showforminsertuser"><button style="background-color: #007EC6;display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>" >Thêm mới</button></a>
+                <button id="deleteMultipleBtn" style="background-color: #EC221F; margin-left: 18px;display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>">Xóa nhiều</button>
                 <form id="deleteMultipleForm" action="<?php echo URLROOT ?>/home/deleteMultipleUser" method="post">
                     <input type="hidden" name="ids" id="idsInput">
                 </form>
@@ -47,7 +137,7 @@
                     <th>Tên người dùng</th>
                     <th>Ngày sinh</th>
                     <th>Trạng thái</th>
-                    <th>Hành động</th>
+                    <th style="display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>">Hành động</th>
                 </tr>
                 <?php foreach($data['users'] as $user) : ?>     
                 <tr>
@@ -56,9 +146,9 @@
                     <td><?php echo $user->username ?></td>
                     <td><?php echo $user->birthday ?></td>
                     <td><?php echo $user->trangthai ?></td>
-                    <td>
+                    <td style="display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>">
                         <a href="<?php echo URLROOT ?>/home/getUserById/<?php echo $user->id ?>"><button style="background-color: #14AE5C;">Sửa</button></a>
-                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>')"><button style="background-color: #EC221F;display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>">Xóa</button></a>
+                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>')"><button style="background-color: #EC221F;">Xóa</button></a>
                     </td>
                 </tr>
                 <script>
@@ -108,23 +198,62 @@
 
         </div>
     </div>
+    <div class="delete-modal" id="deleteModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Thông báo</h2>
+                <span class="close-modal" id="closeModal">×</span>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDeleteBtn" class="btn-ok">OK</button>
+                <button id="cancelDeleteBtn" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Khôi phục trạng thái từ sessionStorage (hoặc localStorage nếu bạn muốn)
-            const selectedUsers = JSON.parse(sessionStorage.getItem("selectedUsers")) || []; // Mảng object {id, username}
+            // Khôi phục trạng thái từ sessionStorage
+            const selectedUsers = JSON.parse(sessionStorage.getItem("selectedUsers")) || [];
             const headerCheckBox = document.querySelector("th img");
             const rowCheckBoxes = document.querySelectorAll("td img");
 
-            // Khôi phục trạng thái checkbox cho các dòng
+            // Modal elements
+            const deleteModal = document.getElementById("deleteModal");
+            const deleteMessage = document.getElementById("deleteMessage");
+            const closeModal = document.getElementById("closeModal");
+            const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+            const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+
+            // Hàm hiển thị modal
+            function showModal(message, callback) {
+                deleteMessage.textContent = message;
+                deleteModal.style.display = "flex";
+                confirmDeleteBtn.onclick = function() {
+                    callback();
+                    hideModal();
+                };
+                cancelDeleteBtn.onclick = hideModal;
+                closeModal.onclick = hideModal;
+            }
+
+            // Hàm ẩn modal
+            function hideModal() {
+                deleteModal.style.display = "none";
+            }
+
+            // Khôi phục trạng thái checkbox
             rowCheckBoxes.forEach(function(item) {
                 const row = item.closest("tr");
-                const id = row.children[1].textContent; // Cột ID
+                const id = row.children[1].textContent;
                 if (selectedUsers.some(user => user.id === id)) {
                     item.setAttribute("src", "<?php echo URLROOT ?>/image/checkked.png");
                 }
             });
 
-            // Bắt sự kiện click vào checkbox header
+            // Checkbox header
             headerCheckBox.addEventListener("click", function() {
                 let isChecked = headerCheckBox.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
                 headerCheckBox.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
@@ -132,10 +261,9 @@
                 rowCheckBoxes.forEach(function(item) {
                     const row = item.closest("tr");
                     const id = row.children[1].textContent;
-                    const username = row.children[2].textContent; // Cột Username
+                    const username = row.children[2].textContent;
                     item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
 
-                    // Cập nhật danh sách selectedUsers
                     if (isChecked) {
                         if (!selectedUsers.some(user => user.id === id)) {
                             selectedUsers.push({ id: id, username: username });
@@ -148,7 +276,7 @@
                 sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
             });
 
-            // Bắt sự kiện click vào checkbox ở các dòng
+            // Checkbox từng dòng
             rowCheckBoxes.forEach(function(item) {
                 item.addEventListener("click", function(e) {
                     const row = item.closest("tr");
@@ -157,7 +285,6 @@
                     let isChecked = item.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
                     item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
 
-                    // Cập nhật danh sách selectedUsers
                     if (isChecked) {
                         if (!selectedUsers.some(user => user.id === id)) {
                             selectedUsers.push({ id: id, username: username });
@@ -167,7 +294,7 @@
                         if (index > -1) selectedUsers.splice(index, 1);
                     }
                     sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
-        rubble });
+                });
             });
 
             // Xử lý nút "Xóa nhiều"
@@ -178,22 +305,23 @@
                     return;
                 }
 
-                // Lấy danh sách tất cả username từ selectedUsers (bao gồm các trang khác)
                 const listUserNames = selectedUsers.map(user => user.username);
-
-                if (!confirm("Bạn có chắc muốn xóa những người dùng này: " + listUserNames.join(", ") + " ?")) {
-                    return;
-                }
-
-                // Chỉ gửi mảng ID qua form
-                const selectedIds = selectedUsers.map(user => user.id);
-                document.getElementById("idsInput").value = JSON.stringify(selectedIds);
-                document.getElementById("deleteMultipleForm").submit();
-
-                // Xóa danh sách đã chọn khỏi sessionStorage sau khi submit
-                sessionStorage.removeItem("selectedUsers");
+                showModal("Bạn có chắc muốn xóa những người dùng này: " + listUserNames.join(", ") + " ?", function() {
+                    const selectedIds = selectedUsers.map(user => user.id);
+                    document.getElementById("idsInput").value = JSON.stringify(selectedIds);
+                    document.getElementById("deleteMultipleForm").submit();
+                    sessionStorage.removeItem("selectedUsers");
+                });
             });
+
+            // Xử lý xóa từng người dùng
+            window.hoilai = function(username, id) {
+                showModal("Bạn chắc chắn muốn xóa " + username + " chứ?", function() {
+                    window.location.href = "<?php echo URLROOT ?>/home/deleteUserById/" + id;
+                });
+                return false; // Ngăn hành động mặc định của <a>
+            };
         });
-    </script>
+</script>
 </body>
 </html>

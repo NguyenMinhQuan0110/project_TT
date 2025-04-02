@@ -56,8 +56,8 @@
                             <td><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->ngayduyet ?></a></td> 
                             <td style="display: flex;justify-content: space-between; /* Đẩy nội dung và nút sang hai phía */"><span><a href="<?php echo URLROOT ?>/don/getDonById/<?php echo $don->id ?>" style="text-decoration: none;color: #333;"><?php echo $don->title ?></a></span>
                                 <div class="buttons" style="display: <?php if($don->trangthai!="chưa duyệt"){echo "none";} ?>;">
-                                    <a href="<?php echo URLROOT ?>/don/getDonByIdDuyetNhanh/<?php echo $don->id ?>"><button style="background-color: #14AE5C;">Duyệt</button></a>
-                                    <a href="<?php echo URLROOT ?>/don/getDonByIdHuy/<?php echo $don->id ?>"><button style="background-color: #EC221F;">Hủy</button></a>
+                                    <a href="<?php echo URLROOT ?>/don/getDonByIdDuyetNhanh/<?php echo $don->id ?>"><button style="background-color: #14AE5C;display:<?php if($_SESSION["loai_user"]=="người dùng"||$_SESSION["user_id"]!=$don->nguoiduyet){echo "none";} ?>">Duyệt</button></a>
+                                    <a href="<?php echo URLROOT ?>/don/getDonByIdHuy/<?php echo $don->id ?>"><button style="background-color: #EC221F;display:<?php if($_SESSION["loai_user"]=="người dùng"||$_SESSION["user_id"]!=$don->nguoiduyet){echo "none";} ?>">Hủy</button></a>
                                 </div>
                             </td>
                         </tr>

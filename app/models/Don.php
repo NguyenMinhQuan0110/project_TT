@@ -1,7 +1,8 @@
 <?php
 class Don extends Model{
-    public function get30Don() {
-        $this->db->query("call get30Don()");
+    public function get30Don($ngayduyet) {
+        $this->db->query("call get30Don(:ngayduyet)");
+        $this->db->bind(":ngayduyet",$ngayduyet);
         return $this->db->resultSet();
     }
     public function getUserByLoaiUserAndPhongBan($loaiuser,$phongban){
@@ -10,17 +11,15 @@ class Don extends Model{
         $this->db->bind(":phongban",$phongban);
         return $this->db->resultSet();
     }
-    public function getTotalAllDonByNguoiDuyet($nguoiduyet){
-        $this->db->query("call getTotalAllDonByNguoiDuyet(:nguoiduyet)");
-        $this->db->bind(":nguoiduyet",$nguoiduyet);
+    public function getTotalAllDon(){
+        $this->db->query("call getTotalAllDon()");
         $row= $this->db->single();
         return $row->toltal;
     }
-    public function getAllDonByNguoiDuyet($limits, $offsets,$nguoiduyet){
-        $this->db->query("call getAllDonByNguoiDuyet(:limits,:offsets,:nguoiduyet)");
+    public function getAllDon($limits, $offsets){
+        $this->db->query("call getAllDon(:limits,:offsets)");
         $this->db->bind(":limits",$limits);
         $this->db->bind(":offsets",$offsets);
-        $this->db->bind(":nguoiduyet",$nguoiduyet);
         return $this->db->resultSet();
     }
     public function getTotalSearchDon($keyword){

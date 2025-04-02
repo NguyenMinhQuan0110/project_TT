@@ -43,7 +43,7 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        $dons=$this->donModel->get30Don();
+        $dons=$this->donModel->get30Don($_SESSION["user_id"]);
         $data=[
             "dons"=> $dons
         ];
@@ -54,17 +54,16 @@ class HomeController extends Controller {
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        // Số lượng người dùng trên mỗi trang
-        $limit = 5; // Bạn có thể thay đổi số này
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Lấy số trang từ query string, mặc định là 1
-        $offset = ($page - 1) * $limit; // Tính vị trí bắt đầu
 
-        // Lấy tổng số người dùng
-        $totalUsers = $this->userModel->getTotalAllUser(); // Cần thêm phương thức này trong model
-        $totalPages = ceil($totalUsers / $limit); // Tính tổng số trang
+        $limit = 5; 
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($page - 1) * $limit; 
 
-        // Lấy danh sách người dùng theo trang
-        $users = $this->userModel->getAllUser($limit, $offset); // Cần thêm phương thức này trong model
+        
+        $totalUsers = $this->userModel->getTotalAllUser(); 
+        $totalPages = ceil($totalUsers / $limit);
+
+        $users = $this->userModel->getAllUser($limit, $offset);
 
         $data = [
             "totalUsers"=>$totalUsers,
@@ -81,7 +80,7 @@ class HomeController extends Controller {
             exit();
         }
         if($_SESSION["loai_user"]=="người dùng"){
-            $_SESSION["message"] = "Mày đéo có quyền!";
+            $_SESSION["message"] = "Bạn không có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
         }
@@ -93,7 +92,7 @@ class HomeController extends Controller {
             exit();
         }
         if($_SESSION["loai_user"]=="người dùng"){
-            $_SESSION["message"] = "Mày đéo có quyền!";
+            $_SESSION["message"] = "Bạn không có quyền!";
             header("Location: " . URLROOT . "/home/index");
             exit();
         }

@@ -32,10 +32,11 @@
                 <div>
                     <label for="username">Tên người dùng <span style="color: red;">*</span></label>
                     <input type="text" id="username" name="username" value="<?php echo $data["user"]->username ?>" required style="margin-left: 29px;">
+                    <span class="error" id="usernameError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Tên người dùng không được để trống</span>
                 </div>
                 <div>
-                    <label for="username">Mật khẩu <span style="color: red;">*</span></label>
-                    <input type="password" id="password" name="password" required style="margin-left: 68px;">
+                    <label for="username">Mật khẩu </label>
+                    <input type="password" id="password" name="password" required style="margin-left: 79px;" placeholder="Để trống mật khẩu là lấy mật khẩu cũ">
                 </div>
                 <div>
                     <label for="username">Email </label>
@@ -47,21 +48,25 @@
                 </div>
                 <div>
                     <label for="username">Loại người dung <span style="color: red;">*</span></label>
-                    <select id="cars" style="margin-left: 19px;" name="loaiuser">
+                    <select id="loaiuser" style="margin-left: 19px;" name="loaiuser">
                         <option value="<?php echo $data["user"]->loaiuser ?>"><?php echo $data["user"]->loaiuser ?></option>
+                        <option ></option>
                         <option value="quản lý">quản lý</option>
                         <option value="người dùng">người dùng</option>
-                      </select>
+                    </select>
+                    <span class="error" id="loaiuserError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Bạn phải chọn loại user</span>
                 </div>
                 <div>
                     <label for="username">Phòng ban <span style="color: red;">*</span></label>
-                    <select id="cars" style="margin-left: 53px;" name="phongban">
+                    <select id="phongban" style="margin-left: 53px;" name="phongban">
                         <option value="<?php echo $data["user"]->phongban ?>"><?php echo $data["user"]->phongban ?></option>
+                        <option ></option>
                         <option value="Kĩ thuật">Kĩ thuật</option>
                         <option value="Nhân sự">Nhân sự</option>
                         <option value="Kế toán">Kế toán</option>
                         <option value="Kế hoạch">Kế hoạch</option>   
                       </select>
+                      <span class="error" id="phongbanError" style="font-size: 14px;color: #F90A0A;margin-left: 22%;display: none; margin-top: 18px;">※Bạn phải chọn phong ban cho user</span>
                 </div>
                 <div>
                     <label for="username">Khóa tài khoản</label>
@@ -104,6 +109,33 @@
             const deleteNullBtn=document.getElementById("delete_null_btn");
             if(!isSave){
                 e.preventDefault();//ngăn gửi form
+                const username=document.getElementById("username").value;
+                if(username==""){
+                    document.getElementById("usernameError").style.display="flex";
+                    document.getElementById("username").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("usernameError").style.display="none";
+                    document.getElementById("username").style.border="1px solid";
+                }
+                const loaiuser=document.getElementById("loaiuser").value;
+                if(loaiuser==""){
+                    document.getElementById("loaiuserError").style.display="flex";
+                    document.getElementById("loaiuser").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("loaiuserError").style.display="none";
+                    document.getElementById("loaiuser").style.border="1px solid";
+                }
+                const phongban=document.getElementById("phongban").value;
+                if(phongban==""){
+                    document.getElementById("phongbanError").style.display="flex";
+                    document.getElementById("phongban").style.border="1px solid red";
+                    return;
+                }else{
+                    document.getElementById("phongbanError").style.display="none";
+                    document.getElementById("phongban").style.border="1px solid";
+                }
                 const inputs= document.querySelectorAll("form input");
                 inputs.forEach(function(input){
                     if(input.type!=="submit"&& input.type!=="button"){
@@ -161,8 +193,16 @@
                 deleteNullBtn.value="Xóa trắng";
                 isSave=false;
             }else{
-                //load lại trang 
-                location.reload();
+                const inputs = document.querySelectorAll("form input:not([name='loginname'])");
+                inputs.forEach(function(input) {
+                    if (input.type !== "submit" && input.type !== "button" && input.type !== "hidden") {
+                        input.value = "";
+                    }
+                });
+                const selects = document.querySelectorAll("form select");
+                selects.forEach(function(select) {
+                    select.selectedIndex = 1;//vị trí option bắt đầu tù 0
+                });
             }
         })
     </script>
