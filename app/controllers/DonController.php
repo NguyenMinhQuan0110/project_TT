@@ -117,12 +117,12 @@ class DonController extends Controller{
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]=="người dùng"){
+        $don=$this->donModel->getDonById($id);
+        if($_SESSION["loai_user"]=="người dùng"||$_SESSION["user_id"]!=$don->nguoiduyet){
             $_SESSION["message"] = "Bạn không có quyền!";
             header("Location: " . URLROOT . "/don/index");
             exit();
         }
-        $don=$this->donModel->getDonById($id);
         $data=[
             "don"=>$don
         ];
@@ -133,12 +133,12 @@ class DonController extends Controller{
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]=="người dùng"){
+        $don=$this->donModel->getDonById($id);
+        if($_SESSION["loai_user"]=="người dùng"||$_SESSION["user_id"]!=$don->nguoiduyet){
             $_SESSION["message"] = "Bạn không có quyền!";
-            header("Location: " . URLROOT . "/home/index");
+            header("Location: " . URLROOT . "/don/index");
             exit();
         }
-        $don=$this->donModel->getDonById($id);
         $data=[
             "don"=>$don
         ];
@@ -149,12 +149,12 @@ class DonController extends Controller{
             header("Location: " . URLROOT . "/home/showFormlogin");
             exit();
         }
-        if($_SESSION["loai_user"]=="người dùng"){
+        $don=$this->donModel->getDonById($id);
+        if($_SESSION["loai_user"]=="người dùng"||$_SESSION["user_id"]!=$don->nguoiduyet){
             $_SESSION["message"] = "Bạn không có quyền!";
-            header("Location: " . URLROOT . "/home/index");
+            header("Location: " . URLROOT . "/don/index");
             exit();
         }
-        $don=$this->donModel->getDonById($id);
         $data=[
             "don"=>$don
         ];

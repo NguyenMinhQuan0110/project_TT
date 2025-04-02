@@ -7,93 +7,93 @@
     <link rel="stylesheet" href="<?php echo URLROOT ?>/css/list_form.css">
     <style>
         .delete-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
-    .modal-content {
-        background-color: white;
-        border-radius: 5px;
-        width: 400px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        overflow: hidden; /* Đảm bảo các góc bo tròn không bị tràn */
-    }
+        .modal-content {
+            background-color: white;
+            border-radius: 5px;
+            width: 400px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            overflow: hidden; /* Đảm bảo các góc bo tròn không bị tràn */
+        }
 
-    .modal-header {
-        background-color: #007EC6; /* Màu xanh dương đậm */
-        color: white;
-        padding: 10px 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        .modal-header {
+            background-color: #007EC6; /* Màu xanh dương đậm */
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .modal-header h2 {
-        margin: 0;
-        font-size: 18px;
-        font-weight: bold;
-    }
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-    .close-modal {
-        cursor: pointer;
-        font-size: 20px;
-        color: white;
-        font-weight: bold;
-    }
+        .close-modal {
+            cursor: pointer;
+            font-size: 20px;
+            color: white;
+            font-weight: bold;
+        }
 
-    .close-modal:hover {
-        color: #ddd;
-    }
+        .close-modal:hover {
+            color: #ddd;
+        }
 
-    .modal-body {
-        padding: 20px;
-        font-size: 16px;
-        color: #333;
-    }
+        .modal-body {
+            padding: 20px;
+            font-size: 16px;
+            color: #333;
+        }
 
-    .modal-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        padding: 10px 15px;
-        border-top: 1px solid #ddd;
-    }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 10px 15px;
+            border-top: 1px solid #ddd;
+        }
 
-    .btn-ok {
-        background-color: #007EC6; /* Màu xanh dương */
-        color: white;
-        padding: 8px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
+        .btn-ok {
+            background-color: #007EC6; /* Màu xanh dương */
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-    .btn-ok:hover {
-        background-color: #007EC6;
-    }
+        .btn-ok:hover {
+            background-color: #007EC6;
+        }
 
-    .btn-cancel {
-        background-color: #FF3333; /* Màu đỏ */
-        color: white;
-        padding: 8px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
+        .btn-cancel {
+            background-color: #FF3333; /* Màu đỏ */
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-    .btn-cancel:hover {
-        background-color: #e62e2e;
-    }
+        .btn-cancel:hover {
+            background-color: #e62e2e;
+        }
     </style>
 </head>
 <body>
@@ -147,8 +147,8 @@
                     <td><?php echo $user->birthday ?></td>
                     <td><?php echo $user->trangthai ?></td>
                     <td style="display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>">
-                        <a href="<?php echo URLROOT ?>/home/getUserById/<?php echo $user->id ?>"><button style="background-color: #14AE5C;">Sửa</button></a>
-                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>')"><button style="background-color: #EC221F;">Xóa</button></a>
+                        <a href="<?php echo URLROOT ?>/home/getUserById/<?php echo $user->id ?>"><button style="background-color: #14AE5C;display:<?php if($_SESSION["phong_ban"]!=$user->phongban){echo "none";} ?>">Sửa</button></a>
+                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>')"><button style="background-color: #EC221F;display:<?php if($_SESSION["phong_ban"]!=$user->phongban){echo "none";} ?>">Xóa</button></a>
                     </td>
                 </tr>
                 <script>
@@ -158,10 +158,8 @@
                 </script>
                 <?php endforeach; ?>
             </table>
-            <!-- Thêm phần phân trang -->
             <div class="pagination">
                 <?php 
-                // Định nghĩa $baseUrl dựa trên việc có keyword hay không
                 $baseUrl = isset($data['keyword']) && !empty($data['keyword']) 
                     ? URLROOT . '/home/seachUser?keyword=' . urlencode($data['keyword']) 
                     : URLROOT . '/home/formlistuser';
@@ -214,114 +212,123 @@
         </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Khôi phục trạng thái từ sessionStorage
-            const selectedUsers = JSON.parse(sessionStorage.getItem("selectedUsers")) || [];
-            const headerCheckBox = document.querySelector("th img");
-            const rowCheckBoxes = document.querySelectorAll("td img");
+document.addEventListener("DOMContentLoaded", function() {
 
-            // Modal elements
-            const deleteModal = document.getElementById("deleteModal");
-            const deleteMessage = document.getElementById("deleteMessage");
-            const closeModal = document.getElementById("closeModal");
-            const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-            const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+    let selectedUsers = JSON.parse(sessionStorage.getItem("selectedUsers")) || [];
+    const headerCheckBox = document.querySelector("th img");
+    const rowCheckBoxes = document.querySelectorAll("td img");
 
-            // Hàm hiển thị modal
-            function showModal(message, callback) {
-                deleteMessage.textContent = message;
-                deleteModal.style.display = "flex";
-                confirmDeleteBtn.onclick = function() {
-                    callback();
-                    hideModal();
-                };
-                cancelDeleteBtn.onclick = hideModal;
-                closeModal.onclick = hideModal;
-            }
 
-            // Hàm ẩn modal
-            function hideModal() {
-                deleteModal.style.display = "none";
-            }
+    const deleteModal = document.getElementById("deleteModal");
+    const deleteMessage = document.getElementById("deleteMessage");
+    const closeModal = document.getElementById("closeModal");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
 
-            // Khôi phục trạng thái checkbox
-            rowCheckBoxes.forEach(function(item) {
-                const row = item.closest("tr");
-                const id = row.children[1].textContent;
-                if (selectedUsers.some(user => user.id === id)) {
-                    item.setAttribute("src", "<?php echo URLROOT ?>/image/checkked.png");
+    function showModal(message, callback) {
+        deleteMessage.textContent = message;
+        deleteModal.style.display = "flex";
+        confirmDeleteBtn.onclick = function() {
+            callback();
+            hideModal();
+        };
+        cancelDeleteBtn.onclick = hideModal;
+        closeModal.onclick = hideModal;
+    }
+
+    function hideModal() {
+        deleteModal.style.display = "none";
+    }
+
+
+    const currentPageUserIds = Array.from(rowCheckBoxes).map(item => {
+        const row = item.closest("tr");
+        return row.children[1].textContent;
+    });
+
+
+    selectedUsers = selectedUsers.filter(user => currentPageUserIds.includes(user.id));
+
+
+    rowCheckBoxes.forEach(function(item) {
+        const row = item.closest("tr");
+        const id = row.children[1].textContent;
+        if (selectedUsers.some(user => user.id === id)) {
+            item.setAttribute("src", "<?php echo URLROOT ?>/image/checkked.png");
+        } else {
+            item.setAttribute("src", "<?php echo URLROOT ?>/image/checkbox.png");
+        }
+    });
+
+
+    headerCheckBox.addEventListener("click", function() {
+        let isChecked = headerCheckBox.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
+        headerCheckBox.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
+
+        rowCheckBoxes.forEach(function(item) {
+            const row = item.closest("tr");
+            const id = row.children[1].textContent;
+            const username = row.children[2].textContent;
+            item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
+
+            if (isChecked) {
+                if (!selectedUsers.some(user => user.id === id)) {
+                    selectedUsers.push({ id: id, username: username });
                 }
-            });
-
-            // Checkbox header
-            headerCheckBox.addEventListener("click", function() {
-                let isChecked = headerCheckBox.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
-                headerCheckBox.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
-
-                rowCheckBoxes.forEach(function(item) {
-                    const row = item.closest("tr");
-                    const id = row.children[1].textContent;
-                    const username = row.children[2].textContent;
-                    item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
-
-                    if (isChecked) {
-                        if (!selectedUsers.some(user => user.id === id)) {
-                            selectedUsers.push({ id: id, username: username });
-                        }
-                    } else {
-                        const index = selectedUsers.findIndex(user => user.id === id);
-                        if (index > -1) selectedUsers.splice(index, 1);
-                    }
-                });
-                sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
-            });
-
-            // Checkbox từng dòng
-            rowCheckBoxes.forEach(function(item) {
-                item.addEventListener("click", function(e) {
-                    const row = item.closest("tr");
-                    const id = row.children[1].textContent;
-                    const username = row.children[2].textContent;
-                    let isChecked = item.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
-                    item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
-
-                    if (isChecked) {
-                        if (!selectedUsers.some(user => user.id === id)) {
-                            selectedUsers.push({ id: id, username: username });
-                        }
-                    } else {
-                        const index = selectedUsers.findIndex(user => user.id === id);
-                        if (index > -1) selectedUsers.splice(index, 1);
-                    }
-                    sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
-                });
-            });
-
-            // Xử lý nút "Xóa nhiều"
-            const deleteMultipleBtn = document.getElementById("deleteMultipleBtn");
-            deleteMultipleBtn.addEventListener("click", function() {
-                if (selectedUsers.length < 2) {
-                    alert("Vui lòng chọn ít nhất 2 người dùng để xóa!");
-                    return;
-                }
-
-                const listUserNames = selectedUsers.map(user => user.username);
-                showModal("Bạn có chắc muốn xóa những người dùng này: " + listUserNames.join(", ") + " ?", function() {
-                    const selectedIds = selectedUsers.map(user => user.id);
-                    document.getElementById("idsInput").value = JSON.stringify(selectedIds);
-                    document.getElementById("deleteMultipleForm").submit();
-                    sessionStorage.removeItem("selectedUsers");
-                });
-            });
-
-            // Xử lý xóa từng người dùng
-            window.hoilai = function(username, id) {
-                showModal("Bạn chắc chắn muốn xóa " + username + " chứ?", function() {
-                    window.location.href = "<?php echo URLROOT ?>/home/deleteUserById/" + id;
-                });
-                return false; // Ngăn hành động mặc định của <a>
-            };
+            } else {
+                const index = selectedUsers.findIndex(user => user.id === id);
+                if (index > -1) selectedUsers.splice(index, 1);
+            }
         });
+        sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
+    });
+
+
+    rowCheckBoxes.forEach(function(item) {
+        item.addEventListener("click", function(e) {
+            const row = item.closest("tr");
+            const id = row.children[1].textContent;
+            const username = row.children[2].textContent;
+            let isChecked = item.getAttribute("src") === "<?php echo URLROOT ?>/image/checkbox.png";
+            item.setAttribute("src", isChecked ? "<?php echo URLROOT ?>/image/checkked.png" : "<?php echo URLROOT ?>/image/checkbox.png");
+
+            if (isChecked) {
+                if (!selectedUsers.some(user => user.id === id)) {
+                    selectedUsers.push({ id: id, username: username });
+                }
+            } else {
+                const index = selectedUsers.findIndex(user => user.id === id);
+                if (index > -1) selectedUsers.splice(index, 1);
+            }
+            sessionStorage.setItem("selectedUsers", JSON.stringify(selectedUsers));
+        });
+    });
+
+
+    const deleteMultipleBtn = document.getElementById("deleteMultipleBtn");
+    deleteMultipleBtn.addEventListener("click", function() {
+        if (selectedUsers.length < 2) {
+            alert("Vui lòng chọn ít nhất 2 người dùng để xóa!");
+            return;
+        }
+
+        const listUserNames = selectedUsers.map(user => user.username);
+        showModal("Bạn có chắc muốn xóa những người dùng này: " + listUserNames.join(", ") + " ?", function() {
+            const selectedIds = selectedUsers.map(user => user.id);
+            document.getElementById("idsInput").value = JSON.stringify(selectedIds);
+            document.getElementById("deleteMultipleForm").submit();
+            sessionStorage.removeItem("selectedUsers");
+        });
+    });
+
+
+    window.hoilai = function(username, id) {
+        showModal("Bạn chắc chắn muốn xóa " + username + " chứ?", function() {
+            window.location.href = "<?php echo URLROOT ?>/home/deleteUserById/" + id;
+        });
+        return false;
+    };
+});
 </script>
 </body>
 </html>
