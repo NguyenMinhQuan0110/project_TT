@@ -1,14 +1,16 @@
 <?php
 class User extends Model {
-    public function getTotalAllUser(){
-        $this->db->query("call getTotalAllUser()");
+    public function getTotalAllUser($phongban){
+        $this->db->query("call getTotalAllUser(:phongban)");
+        $this->db->bind(":phongban",$phongban);
         $row= $this->db->single();
         return $row->toltal;
     }
-    public function getAllUser($limits, $offsets){
-        $this->db->query("call getAllUser(:limits,:offsets)");
+    public function getAllUser($limits, $offsets,$phongban){
+        $this->db->query("call getAllUser(:limits,:offsets,:phongban)");
         $this->db->bind(":limits",$limits);
         $this->db->bind(":offsets",$offsets);
+        $this->db->bind(":phongban",$phongban);
         return $this->db->resultSet();
     }
     public function getUserByLoginnameAndPassword($loginname,$password){
@@ -52,17 +54,19 @@ class User extends Model {
         $this->db->bind(":id",$id);
         return $this->db->execute();
     }
-    public function getTotalSearchUser($keyword){
-        $this->db->query("call getTotalSearchUser(:keyword)");
+    public function getTotalSearchUser($keyword,$phongban){
+        $this->db->query("call getTotalSearchUser(:keyword,:phongban)");
         $this->db->bind(":keyword",$keyword);
+        $this->db->bind(":phongban",$phongban);
         $row= $this->db->single();
         return $row->toltal;
     }
-    public function seachUser($keyword,$limits,$offsets){
-        $this->db->query("call 	searchUser(:keyword,:limits,:offsets)");
+    public function seachUser($keyword,$limits,$offsets,$phongban){
+        $this->db->query("call 	searchUser(:keyword,:limits,:offsets,:phongban)");
         $this->db->bind(":keyword",$keyword);
         $this->db->bind(":limits",$limits);
         $this->db->bind(":offsets",$offsets);
+        $this->db->bind(":phongban",$phongban);
         return $this->db->resultSet();
     }
 }

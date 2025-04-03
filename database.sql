@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 02, 2025 lúc 09:26 AM
+-- Thời gian đã tạo: Th4 03, 2025 lúc 03:53 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -63,8 +63,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllDon` (IN `p_limits` INT, IN `
 	SELECT users.username,dons.loaidon,dons.ngaytao,dons.trangthai,dons.ngayduyet,dons.title,dons.id,dons.nguoiduyet FROM dons INNER JOIN users ON users.id=dons.userid LIMIT p_limits OFFSET p_offsets;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllUser` (IN `p_limits` INT, IN `p_offsets` INT)   BEGIN
-    SELECT * FROM users 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllUser` (IN `p_limits` INT, IN `p_offsets` INT, IN `p_phongban` VARCHAR(100))   BEGIN
+    SELECT * FROM users WHERE users.phongban=p_phongban
     LIMIT p_limits OFFSET p_offsets;
 END$$
 
@@ -80,8 +80,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalAllDon` ()   BEGIN
     SELECT COUNT(*) AS toltal FROM dons;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalAllUser` ()   BEGIN
-    SELECT COUNT(*) as toltal FROM users;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalAllUser` (IN `p_phongban` VARCHAR(100))   BEGIN
+    SELECT COUNT(*) as toltal FROM users WHERE users.phongban=p_phongban;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalSearchDon` (IN `p_keyword` VARCHAR(100))   BEGIN
@@ -91,11 +91,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalSearchDon` (IN `p_keyword` 
     OR dons.loaidon LIKE  CONCAT('%', p_keyword, '%');
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalSearchUser` (IN `p_keyword` VARCHAR(255))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getTotalSearchUser` (IN `p_keyword` VARCHAR(255), IN `p_phongban` VARCHAR(100))   BEGIN
     SELECT COUNT(*) as toltal FROM users 
-    WHERE loginname LIKE CONCAT('%', p_keyword, '%')
+    WHERE users.phongban=p_phongban AND( loginname LIKE CONCAT('%', p_keyword, '%')
     OR username LIKE CONCAT('%', p_keyword, '%')
-    OR email LIKE CONCAT('%', p_keyword, '%');
+    OR email LIKE CONCAT('%', p_keyword, '%'));
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserById` (IN `p_id` INT)   BEGIN
@@ -162,11 +162,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `searchDon` (IN `p_keyword` VARCHAR(
     LIMIT p_limits OFFSET p_offsets;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `searchUser` (IN `p_keyword` VARCHAR(255), IN `p_limits` INT, IN `p_offsets` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `searchUser` (IN `p_keyword` VARCHAR(255), IN `p_limits` INT, IN `p_offsets` INT, IN `p_phongban` VARCHAR(100))   BEGIN
     SELECT * FROM users 
-    WHERE loginname LIKE CONCAT('%', p_keyword, '%')
+    WHERE users.phongban=p_phongban AND ( loginname LIKE CONCAT('%', p_keyword, '%')
     OR username LIKE CONCAT('%', p_keyword, '%')
-    OR email LIKE CONCAT('%', p_keyword, '%')
+    OR email LIKE CONCAT('%', p_keyword, '%'))
     LIMIT p_limits OFFSET p_offsets;
 END$$
 
@@ -221,13 +221,13 @@ CREATE TABLE `dons` (
 --
 
 INSERT INTO `dons` (`id`, `title`, `noidung`, `nguoiduyet`, `loaidon`, `startdate`, `enddate`, `dinhkem`, `trangthai`, `userid`, `ngaytao`, `ngayduyet`) VALUES
-(39, 'sfesdff', 'dfedsfff', 6, 'Đơn cấp vật tư máy móc', '2025-04-02', '2025-04-03', '1743155451_66335b3bb9ec6 - Copy.jpg', 'đã huy', 47, '2025-03-28 16:50:51', '2025-03-28'),
-(52, 'tesst', 'tesst', 2, 'Đơn nghỉ phép', '2025-04-02', '2025-04-02', '1743569930_ChatGPT Image 10_18_33 1 thg 4, 2025.png', 'đã hủy', 47, '2025-04-02 11:58:50', '2025-04-02'),
-(53, 'test', 'test', 2, 'Đơn nghỉ phép', '2025-04-02', '2025-04-02', '1743575242_ChatGPT Image 10_18_33 1 thg 4, 2025.png', 'chưa duyệt', 102, '2025-04-02 13:27:22', NULL),
-(54, 'test', 'test', 2, 'Đơn nghỉ phép', '2025-04-02', '2025-04-02', '1743575247_ChatGPT Image 10_18_33 1 thg 4, 2025.png', 'chưa duyệt', 102, '2025-04-02 13:27:27', NULL),
-(55, 'tesst2', 'tesst2', 6, 'Đơn nghỉ phép', '2025-04-02', '2025-04-02', '1743577033_ChatGPT Image 10_18_33 1 thg 4, 2025.png', 'đã duyệt', 102, '2025-04-02 13:57:13', '2025-04-02'),
-(56, 'gfergreg', 'regergregr', 103, 'Đơn nghỉ phép', '2025-04-08', '2025-04-22', '1743577172_66335b3bb9ec6 - Copy (2).jpg', 'chưa duyệt', 103, '2025-04-02 13:59:32', NULL),
-(57, 'fdsa', 'fdsa', 6, 'Đơn nghỉ phép', '2025-04-02', '2025-04-02', '1743577499_ChatGPT Image 10_18_33 1 thg 4, 2025.png', 'chưa duyệt', 102, '2025-04-02 14:04:59', NULL);
+(56, 'gfergreg', 'regergregr', 103, 'Đơn nghỉ phép', '2025-04-08', '2025-04-22', '1743577172_66335b3bb9ec6 - Copy (2).jpg', 'đã hủy', 103, '2025-04-02 13:59:32', '2025-04-02'),
+(59, 'dvdfdv', 'vvff', 103, 'Đơn nghỉ phép', '2025-04-22', '2025-04-23', '1743580163_6633fca238df2.webp', 'đã duyệt', 103, '2025-04-02 14:49:23', '2025-04-02'),
+(60, 'dvdfdv', 'vvff', 103, 'Đơn nghỉ phép', '2025-04-22', '2025-04-23', '1743580167_6633fca238df2.webp', 'đã hủy', 103, '2025-04-02 14:49:27', '2025-04-02'),
+(61, 'vrgerfge', 'ffewfef', 6, 'Đơn nghỉ phép', '2025-04-22', '2025-04-08', '1743580998_66335b3bb9ec6.jpg', 'chưa duyệt', 103, '2025-04-02 15:03:18', NULL),
+(62, 'dferfe', '', 103, 'Đơn nghỉ phép', '2025-04-08', '2025-04-09', '1743585915_6633fca238df2.webp', 'đã duyệt', 103, '2025-04-02 16:25:15', '2025-04-02'),
+(63, 'gfbggewfe', '', 103, 'Đơn cấp vật tư máy móc', '2025-04-07', '2025-04-23', '1743586243_66335b3bb9ec6 - Copy (2).jpg', 'đã hủy', 112, '2025-04-02 16:30:43', '2025-04-02'),
+(64, 'uhfofsdfnewkl', '', 103, 'Đơn nghỉ phép', '2025-04-09', '2025-04-16', '1743644811_3de6a81aad5f0c01554e-1714647805-183319avatar.jpg', 'đã hủy', 116, '2025-04-03 08:46:51', '2025-04-03');
 
 -- --------------------------------------------------------
 
@@ -240,8 +240,8 @@ CREATE TABLE `users` (
   `loginname` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(220) NOT NULL,
-  `email` varchar(225) NOT NULL,
-  `birthday` date NOT NULL,
+  `email` varchar(225) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
   `loaiuser` varchar(100) NOT NULL,
   `phongban` varchar(100) NOT NULL,
   `trangthai` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
@@ -252,9 +252,6 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `loginname`, `username`, `password`, `email`, `birthday`, `loaiuser`, `phongban`, `trangthai`) VALUES
-(6, 'nhatduy', 'Trần Nhật Duy', 'e10adc3949ba59abbe56e057f20f883e', 'duy49725@gmail.com', '2003-03-12', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
-(7, 'khuonglieu', 'Lư Tiến Khương', 'e10adc3949ba59abbe56e057f20f883e', 'khuonglol12@gmail.com', '2003-03-18', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
-(8, 'beachmouse', 'Phan Hải Sơn', 'e10adc3949ba59abbe56e057f20f883e', 'son@gamil.com', '2003-03-12', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
 (10, 'fefreg', 'grgre', 'd41d8cd98f00b204e9800998ecf8427e', 'bfd@gmail.com', '2025-03-26', 'người dùng', 'Nhân sự', 'Đang hoạt động'),
 (11, 'edd', 'ưdwqd', 'e10adc3949ba59abbe56e057f20f883e', 'wqd@gmail.com', '2025-03-19', 'người dùng', 'Nhân sự', 'Đang hoạt động'),
 (12, 'ffe', 'êf', '8fa14cdd754f91cc6554c9e71929cce7', 'dsjshdsj@gmail.com', '2004-03-26', 'người dùng', 'Nhân sự', 'Đang hoạt động'),
@@ -262,46 +259,38 @@ INSERT INTO `users` (`id`, `loginname`, `username`, `password`, `email`, `birthd
 (43, 'phuongwibu ', 'Lê Vạn Phương', 'e10adc3949ba59abbe56e057f20f883e', 'phuongwb@gmail.com', '2003-03-10', 'người dùng', 'Kế toán', 'Đã khóa'),
 (44, 'quyetrung', 'Nguyễn Văn Quyết', 'e10adc3949ba59abbe56e057f20f883e', 'quyetrung@gmail.com', '1990-03-24', 'người dùng', 'Kế toán', 'Đang hoạt động'),
 (45, 'toanvap', 'Nguyễn Văn Toàn', 'e10adc3949ba59abbe56e057f20f883e', 'toanvap@gmail.com', '1995-03-27', 'người dùng', 'Kế toán', 'Đang hoạt động'),
-(46, 'hoang', 'Vũ Việt Hoàng', 'e10adc3949ba59abbe56e057f20f883e', 'hoang@gmail.com', '2003-03-24', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
-(47, 'admin', 'admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin@gmail.com', '2000-03-19', 'admin', 'Kĩ thuật', 'Đang hoạt động'),
-(48, 'user1', 'NguyenVanA', 'pass123', 'nguyenvana@gmail.com', '1995-05-15', 'nhân viên', 'Kĩ thuật', 'Đang hoạt động'),
 (49, 'user2', 'TranThiB', 'abc456', 'tranthib@yahoo.com', '1988-11-20', 'quản lý', 'Nhân sự', 'Đang hoạt động'),
 (50, 'user3', 'LeVanC', 'xyz789', 'levanc@outlook.com', '2000-03-10', 'nhân viên', 'Kế toán', 'Đang hoạt động'),
-(54, 'user7', 'DangVanG', 'xyz456', 'dangvang@outlook.com', '1985-02-18', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
 (55, 'user8', 'VuThiH', '789123', 'vuthih@yahoo.com', '1997-04-05', 'nhân viên', 'Kế toán', 'Đang hoạt động'),
 (56, 'user9', 'DoVanI', 'pass456', 'dovani@gmail.com', '1993-06-22', 'nhân viên', 'Kế hoạch', 'Đang hoạt động'),
 (57, 'user10', 'NgoThiK', 'abc789', 'ngothik@outlook.com', '1989-08-14', 'quản lý', 'Nhân sự', 'Đang hoạt động'),
-(58, 'user11', 'TrinhVanL', 'xyz123', 'trinhvanl@gmail.com', '2001-01-30', 'nhân viên', 'Kĩ thuật', 'Đang hoạt động'),
 (59, 'user12', 'LyThiM', 'pass321', 'lythim@yahoo.com', '1996-10-10', 'nhân viên', 'Kế toán', 'Đang hoạt động'),
 (60, 'user13', 'PhanVanN', 'abc654', 'phanvann@outlook.com', '1987-03-25', 'quản lý', 'Kế hoạch', 'Đang hoạt động'),
 (61, 'user14', 'DuongThiO', 'xyz987', 'duongthio@gmail.com', '1994-11-15', 'nhân viên', 'Nhân sự', 'Đang hoạt động'),
 (64, 'user17', 'HaVanR', 'abc321', 'havanr@gmail.com', '1991-09-09', 'nhân viên', 'Kế hoạch', 'Đang hoạt động'),
 (65, 'user18', 'KieuThiS', 'xyz654', 'kieuthis@outlook.com', '2002-02-14', 'nhân viên', 'Nhân sự', 'Đang hoạt động'),
-(66, 'user19', 'LuuVanT', 'pass987', 'luuvant@gmail.com', '1984-12-01', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
 (69, 'user22', 'TranVanW', 'abc987', 'tranvanw@yahoo.com', '1983-06-25', 'quản lý', 'Nhân sự', 'Đang hoạt động'),
 (70, 'user23', 'LeThiX', 'xyz321', 'lethix@outlook.com', '1996-09-12', 'nhân viên', 'Kế toán', 'Đang hoạt động'),
 (71, 'user24', 'PhamVanY', '123987', 'phamvany@gmail.com', '2000-11-05', 'nhân viên', 'Kế hoạch', 'Đang hoạt động'),
-(72, 'user25', 'HoangThiZ', 'pass654', 'hoangthiz@hotmail.com', '1988-01-30', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
 (73, 'user26', 'BuiVanAA', 'abc654', 'buivanaa@yahoo.com', '1994-03-22', 'nhân viên', 'Nhân sự', 'Đang hoạt động'),
 (74, 'user27', 'DangThiBB', 'xyz987', 'dangthibb@gmail.com', '1999-07-14', 'nhân viên', 'Kế toán', 'Đang hoạt động'),
 (75, 'user28', 'VuVanCC', 'pass123', 'vuvancc@outlook.com', '1987-10-10', 'quản lý', 'Kế hoạch', 'Đang hoạt động'),
-(76, 'user29', 'DoThiDD', 'abc456', 'dothidd@hotmail.com', '1992-12-28', 'nhân viên', 'Kĩ thuật', 'Đang hoạt động'),
 (77, 'user30', 'NgoVanEE', 'xyz789', 'ngovanee@gmail.com', '2001-02-15', 'nhân viên', 'Nhân sự', 'Đang hoạt động'),
 (78, 'user31', 'cTrinhThiFF', '123456', 'trinhthiff@yahoo.com', '1985-05-20', 'quản lý', 'Kế toán', 'Đã khóa'),
 (79, 'user32', 'LyVanGG', 'pass789', 'lyvangg@outlook.com', '1997-08-08', 'nhân viên', 'Kế hoạch', 'Đã khóa'),
-(88, 'duck', 'Nguyễn Minh Đức', 'e10adc3949ba59abbe56e057f20f883e', 'duck@gmail.com', '2003-03-25', 'người dùng', 'Kĩ thuật', 'Đã khóa'),
 (89, 'minhgay', 'Lại Quang Minh', 'e10adc3949ba59abbe56e057f20f883e', 'minhgay@gmail.com', '2003-03-26', 'người dùng', 'Kế hoạch', 'Đã khóa'),
 (90, 'bao', 'bao', 'e10adc3949ba59abbe56e057f20f883e', 'bao@gmail.com', '2005-03-10', 'người dùng', 'Nhân sự', 'Đã khóa'),
-(91, 'fvf', 'vèvrv', 'a75001832b9705f4ecd9f2d67881a6c1', 'vrvrv', '2025-04-01', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
-(94, 'chuate', 'Trịnh Tuấn Anhcpsidncisdc', 'ed317f03cfd878109640cb78acf2ee00', 'tank@gmail.com', '2003-03-24', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
 (96, 'đe', 'đe', '7cc2d02c95a718b919b73e97f7919787', 'de@gmail.com', '2025-04-22', 'quản lý', 'Nhân sự', 'Đang hoạt động'),
 (97, 'dfewf', 'ềwfewfef', '261ce7d7f59783df971a96221b892986', 'fgeb@gmail.com', '2025-04-23', 'người dùng', 'Kế toán', 'Đang hoạt động'),
-(98, 'fefef', 'gregreg', '64655d19666832c9e619203fed02e5b7', 'dergerg@gmail.com', '2025-04-30', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
-(99, 'fdfdvfdv', 'dfbfdbfdb', 'c82e27faec972a9bf484d423ed2a042a', 'fdvfvfv@gmail.com', '2025-04-28', 'người dùng', 'Kĩ thuật', 'Đã khóa'),
-(100, 'svkiodvn', 'djvhdivb', '615349d2e19ca9178cb31f40e36e0c4c', 'bfdbfdvd@gmail.com', '2025-04-29', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
-(101, 'bfbgrb', 'gbgrbnt', '7388b1baa204f7eab5338f679013ac8b', 'gbgbngn@gmail.com', '2025-05-07', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
-(102, 'vongvd', 'vongvd', '6bf50ae403219360cf4d3d3383612c09', 'vongvd@sanshin-its.vn', '2025-04-02', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
-(103, 'minhquan', 'Nguyễn Minh Quân', 'e10adc3949ba59abbe56e057f20f883e', 'minhquan11003@gmail.com', '2003-10-01', 'quản lý', 'Kĩ thuật', 'Đang hoạt động');
+(103, 'minhquan', 'Nguyễn Minh Quân', 'e10adc3949ba59abbe56e057f20f883e', 'minhquan11003@gmail.com', '2003-10-01', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
+(104, 'tesst', 'tesst', '22c0766a85c365c67672ed9e7277ce03', 'tesst@gmail.com', '2025-04-02', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
+(106, 'dsvedg', 'ffvsfvf', '3cc0029bb23e546853eb5f0db0d20e1d', 'fcknfn@gmail.com', '2025-04-29', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
+(107, 'sjdifhuifhdoif', 'vl;òidhvuidjfbsk', '3297569182356c6dbbf58fafba7cfa4d', 'vhjbvkbsdkjv3@gmail.com', '2025-04-14', 'người dùng', 'Nhân sự', 'Đang hoạt động'),
+(109, 'cvdsv', 'dcvdsc', '31e9d5054a3d51ae50ee256319ca5bae', '', '0000-00-00', 'quản lý', 'Nhân sự', 'Đang hoạt động'),
+(112, 'tank', 'Trịnh Tuấn Anh', '15142bfc78384aa53cf00628326eaeeb', 'trinhtuananh1312003@gmail.com', '2025-04-15', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
+(113, 'admin', 'admin', 'f19b8dc2029cf707939e886e4b164681', 'admin@gmail.com', '2025-04-09', 'quản lý', 'Kĩ thuật', 'Đang hoạt động'),
+(114, 'khgghods', 'kdndklfns', 'db7f468c1df999a93b1b9216bb2687ba', '', '0000-00-00', 'người dùng', 'Kĩ thuật', 'Đang hoạt động'),
+(116, 'quanuser', 'quanuser', 'd11a704f0858d30751e3d56148799f76', 'minhquan11003@gmail.com', '2003-10-01', 'người dùng', 'Kĩ thuật', 'Đang hoạt động');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -330,13 +319,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT cho bảng `dons`
 --
 ALTER TABLE `dons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

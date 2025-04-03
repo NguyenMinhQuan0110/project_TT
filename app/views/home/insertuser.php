@@ -72,8 +72,31 @@
             </form>
         </div>
     </div>
+    <div class="bomodal" id="bomodal">
+        <div class="modal">
+            <div class="dau">
+                <p>Thông báo </p>
+                <span class="close" id="closeModal">&times;</span>
+            </div>
+            <p>Bạn có chắn chắn muốn lưu lại thay đổi không?</p>
+            <div class="button">
+                <button class="btn_ok" id="btn_ok">Ok</button>
+                <button class="btn_cancel" id="btn_cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
     <script>
         let isSave=false;
+        const bomodal =document.getElementById("bomodal");
+        const closeModal =document.getElementById("closeModal");
+        const btn_ok=document.getElementById("btn_ok");
+        const btn_cancel=document.getElementById("btn_cancel");
+        function hienModal(){
+            bomodal.style.display="flex";
+        }
+        function anModal(){
+            bomodal.style.display="none";
+        }
         document.getElementById("next_button").addEventListener("click", function(e){
             const nextButton=document.getElementById("next_button");
             const deleteNullBtn=document.getElementById("delete_null_btn");
@@ -145,10 +168,20 @@
                 selects.forEach(function(select){
                     select.removeAttribute("disabled");
                 });
-                //cho gửi form nếu nhấn lần 2 vào button id=next_button
-                document.querySelector("form").submit();
+                e.preventDefault();
+                //Hiển thị Modal
+                hienModal();
             }
         })
+        document.getElementById("btn_ok").addEventListener("click",function(e){
+            anModal();
+            document.querySelector("form").submit();
+        })
+        //Khi nhấn dấu X
+        closeModal.addEventListener("click",anModal);
+        //Khi nhấn nút cancel
+        btn_cancel.addEventListener("click",anModal);
+
         document.getElementById("delete_null_btn").addEventListener("click", function(e){
             const nextButton=document.getElementById("next_button");
             const deleteNullBtn=document.getElementById("delete_null_btn");

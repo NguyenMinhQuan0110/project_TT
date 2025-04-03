@@ -25,11 +25,16 @@
             </div>
             <div style="height: 60px;">
                 <input type="submit" value="Login">
-                <input type="button" value="Clear">
+                <input type="button" id="btn_cleare" value="Clear">
             </div>
         </form>
         <span style="color: #F90A0A; margin-left: 153px;font-size: 14px"><?php echo isset($data['msg'])?$data['msg']:""; ?></span>
     </div>
+    <script>
+        document.getElementById("btn_cleare").addEventListener("click",function(e){
+            location.reload();
+        })
+    </script>
 
 </body>
 </html>

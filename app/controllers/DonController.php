@@ -97,7 +97,7 @@ class DonController extends Controller{
 
         $target_path = $target_dir . $dinhkem;
 
-        if ($title && $noidung && $nguoiduyet && $loaidon && $startdate && $enddate && $dinhkem) {
+        if ($title && $nguoiduyet && $loaidon && $startdate && $enddate && $dinhkem) {
             move_uploaded_file($_FILES["dinhkem"]["tmp_name"], $target_path);
             $this->donModel->insertDon($title, $noidung, $nguoiduyet, $loaidon, $startdate, $enddate, $dinhkem,$trangthai,$userid);
             $_SESSION["message"] = "Thêm mới đơn thành công!";
@@ -108,7 +108,13 @@ class DonController extends Controller{
             header("Location: " . URLROOT . "/don/index");
             exit();
         } else {
-            $data = ["error" => "Yêu cầu bạn điền đầy đủ các mục!"];
+            $loaiuser="quản lý";
+            $phongban=$_SESSION["phong_ban"];
+            $nguoiduyet=$this->donModel->getUserByLoaiUserAndPhongBan($loaiuser,$phongban);
+            $data = ["error" => "Yêu cầu bạn điền đầy đủ các mục!",
+
+                        "nguoiduyet"=>$nguoiduyet
+                    ];
             $this->view("don/insert", $data);
         }
     }

@@ -12,7 +12,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Nền mờ */
+            background-color: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,32 +21,33 @@
 
         .modal-content {
             background-color: white;
-            border-radius: 5px;
-            width: 400px;
+            width: 614px;
+            height: 297px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            overflow: hidden; /* Đảm bảo các góc bo tròn không bị tràn */
+            overflow: hidden;
         }
 
         .modal-header {
-            background-color: #007EC6; /* Màu xanh dương đậm */
+            background-color: #007EC6;
             color: white;
-            padding: 10px 15px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .modal-header h2 {
+        .modal-header p {
             margin: 0;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 24px;
         }
 
         .close-modal {
             cursor: pointer;
             font-size: 20px;
-            color: white;
             font-weight: bold;
+            color: white;
         }
 
         .close-modal:hover {
@@ -57,43 +58,47 @@
             padding: 20px;
             font-size: 16px;
             color: #333;
+            text-align: center;
         }
 
         .modal-footer {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            padding: 10px 15px;
-            border-top: 1px solid #ddd;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            margin-top: 4%;
         }
 
         .btn-ok {
-            background-color: #007EC6; /* Màu xanh dương */
+            background-color: #007EC6;
             color: white;
-            padding: 8px 20px;
+            padding: 10px 30px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            height: 50px;
+            width: 220px;
         }
 
         .btn-ok:hover {
-            background-color: #007EC6;
+            background-color: #005ea8;
         }
 
         .btn-cancel {
-            background-color: #FF3333; /* Màu đỏ */
+            background-color: #E5004F;
             color: white;
-            padding: 8px 20px;
+            padding: 10px 30px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            height: 50px;
+            width: 220px;
         }
 
         .btn-cancel:hover {
-            background-color: #e62e2e;
+            background-color: #c40040;
         }
+
     </style>
 </head>
 <body>
@@ -141,14 +146,14 @@
                 </tr>
                 <?php foreach($data['users'] as $user) : ?>     
                 <tr>
-                    <td><img src="<?php echo URLROOT ?>/image/checkbox.png" alt="" style="width: 24px;height: 24px;"> </td>
+                    <td><img src="<?php echo URLROOT ?>/image/checkbox.png" alt="" style="width: 24px;height: 24px; "> </td>
                     <td><?php echo $user->id ?></td>
                     <td><?php echo $user->username ?></td>
                     <td><?php echo $user->birthday ?></td>
                     <td><?php echo $user->trangthai ?></td>
                     <td style="display:<?php if($_SESSION["loai_user"]=="người dùng"){echo "none";} ?>">
-                        <a href="<?php echo URLROOT ?>/home/getUserById/<?php echo $user->id ?>"><button style="background-color: #14AE5C;display:<?php if($_SESSION["phong_ban"]!=$user->phongban){echo "none";} ?>">Sửa</button></a>
-                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>')"><button style="background-color: #EC221F;display:<?php if($_SESSION["phong_ban"]!=$user->phongban){echo "none";} ?>">Xóa</button></a>
+                        <a href="<?php echo URLROOT ?>/home/getUserById/<?php echo $user->id ?>"><button style="background-color: #14AE5C; ?>">Sửa</button></a>
+                        <a href="<?php echo URLROOT ?>/home/deleteUserById/<?php echo $user->id ?>" onclick=" return hoilai('<?php echo $user->username ?>','<?php echo $user->id ?>')"><button style="background-color: #EC221F;">Xóa</button></a>
                     </td>
                 </tr>
                 <script>
@@ -199,7 +204,7 @@
     <div class="delete-modal" id="deleteModal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Thông báo</h2>
+                <p>Thông báo</p>
                 <span class="close-modal" id="closeModal">×</span>
             </div>
             <div class="modal-body">
@@ -209,6 +214,7 @@
                 <button id="confirmDeleteBtn" class="btn-ok">OK</button>
                 <button id="cancelDeleteBtn" class="btn-cancel">Cancel</button>
             </div>
+
         </div>
     </div>
     <script>
@@ -323,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     window.hoilai = function(username, id) {
-        showModal("Bạn chắc chắn muốn xóa " + username + " chứ?", function() {
+        showModal("Bạn chắc chắn muốn xóa " + username +id+ " chứ?", function() {
             window.location.href = "<?php echo URLROOT ?>/home/deleteUserById/" + id;
         });
         return false;

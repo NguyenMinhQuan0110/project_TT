@@ -12,6 +12,7 @@ class HomeController extends Controller {
         $this->view("/login");
     }
     public function login(){
+        if($_SERVER["REQUEST_METHOD"]=="POST"){
             $loginname=$_POST["loginname"];
             $password=md5($_POST["password"]);
 
@@ -32,6 +33,11 @@ class HomeController extends Controller {
                 $data=['msg'=>'※Tên đăng nhập hoặc mật khẩu lỗi. Vui lòng thử lại'];
                 $this->view("/login",$data);
             }
+        }else{
+            $data=['msg'=>'※Tên đăng nhập hoặc mật khẩu lỗi. Vui lòng thử lại'];
+            $this->view("/login",$data);
+
+        }  
     }
     public function logout(){
         session_destroy();
@@ -60,10 +66,10 @@ class HomeController extends Controller {
         $offset = ($page - 1) * $limit; 
 
         
-        $totalUsers = $this->userModel->getTotalAllUser(); 
+        $totalUsers = $this->userModel->getTotalAllUser($_SESSION["phong_ban"]); 
         $totalPages = ceil($totalUsers / $limit);
 
-        $users = $this->userModel->getAllUser($limit, $offset);
+        $users = $this->userModel->getAllUser($limit, $offset,$_SESSION["phong_ban"]);
 
         $data = [
             "totalUsers"=>$totalUsers,
@@ -104,7 +110,7 @@ class HomeController extends Controller {
         $loaiuser=$_POST["loaiuser"];
         $phongban=$_POST["phongban"];
         $trangthai="Đang hoạt động";
-        if($password && $username && $loginname && $email && $birthday && $loaiuser && $phongban){
+        if($password && $username && $loginname && $loaiuser && $phongban){
             $newuser= $this->userModel->insert($loginname,$username,$password,$email,$birthday,$loaiuser,$phongban,$trangthai);
             if($newuser){
                 $_SESSION["message"] = "Thêm mới thành công người dùng!";
@@ -161,7 +167,7 @@ class HomeController extends Controller {
         }else{
             $trangthai="Đang hoạt động";
         }
-        if($password && $username && $loginname && $email && $birthday && $loaiuser && $phongban && $id){
+        if($password && $username && $loginname  && $loaiuser && $phongban && $id){
             $nguoidung=$this->userModel->getUserById($id);
             if($_SESSION["loai_user"]!="admin"){
                 if($_SESSION["loai_user"]==$nguoidung->loaiuser || $_SESSION["phong_ban"]!=$nguoidung->phongban){
@@ -211,8 +217,8 @@ class HomeController extends Controller {
         $offset = ($page - 1) * $limit; // Tính vị trí bắt đầu
 
         if ($keyword) {
-            $users = $this->userModel->seachUser($keyword, $limit, $offset); // Cần thêm phương thức này trong model
-            $totalUsers = $this->userModel->getTotalSearchUser($keyword); // Cần thêm phương thức này trong model
+            $users = $this->userModel->seachUser($keyword, $limit, $offset,$_SESSION["phong_ban"]); // Cần thêm phương thức này trong model
+            $totalUsers = $this->userModel->getTotalSearchUser($keyword,$_SESSION["phong_ban"]); // Cần thêm phương thức này trong model
             $totalPages = ceil($totalUsers / $limit);
 
             $data = [
